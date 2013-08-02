@@ -1,6 +1,22 @@
+#maven stuff
 *.class
+/workdir/*
+/target/*
+.classpath
+.project
+/target
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# gradle
+.gradle
+build
+gradle-app.setting
+
+# eclipse
+.settings
+.metadata
+.classpath
+.project
+bin
+
+# minecraft
+/minecraft

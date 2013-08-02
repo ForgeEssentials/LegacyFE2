@@ -1,0 +1,41 @@
+buildscript {
+	repositories { mavenCentral() }
+	dependencies { classpath 'com.github.abrarsyed.gmcp:GMCP:0.6.2' }
+}
+
+apply plugin: "gmcp"
+
+group = 'com.forgeessentials'
+
+archivesBaseName = 'ForgeEssentials-Server'
+minecraft.minecraftVersion = '1.6.2'
+
+processResources{}
+
+jar { appendix = 'universal' }
+
+task sourceJar(type: Jar) {
+	from sourceSets.main.allSource
+	appendix = 'src'
+}
+
+// has errors for some reason....
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	appendix = 'javadoc'
+	from 'build/docs/javadoc'
+}
+
+// because the normal default jar task has been modified to be obfuscated
+task deobfJar(type: Jar) {
+	from sourceSets.main.output
+	appendix = 'deobf'
+}
+
+artifacts {
+	archives sourceJar
+	archives deobfJar
+	archives javadocJar
+}
+
+// wrapper
+task wrapper(type: Wrapper){ gradleVersion = '1.6' }
