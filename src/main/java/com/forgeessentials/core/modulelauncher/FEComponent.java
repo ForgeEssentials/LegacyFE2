@@ -33,7 +33,7 @@ public @interface FEComponent {
 	/**
 	 * Does this component have an API class, and if so, what is it?
 	 */
-	public Class apiClass() default DummyAPI.class;
+	public String apiClass() default "";
 	/**
 	 * Does this component have a Config class, and if so, what is it?
 	 */
@@ -42,10 +42,6 @@ public @interface FEComponent {
 	 * Version of this module
 	 */
 	public String version() default "";
-	/**
-	 * Parent mod
-	 */
-	public Class parentMod() default ForgeEssentials.class;
 	
 	
 	public class DummyConfig extends BaseConfig{
@@ -66,10 +62,6 @@ public @interface FEComponent {
 			// TODO Auto-generated method stub
 			
 		}
-		
-	}
-	
-	public class DummyAPI{
 		
 	}
 	@Retention(RetentionPolicy.RUNTIME)

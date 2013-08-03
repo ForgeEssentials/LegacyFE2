@@ -15,6 +15,7 @@ import com.forgeessentials.core.modulelauncher.util.CallableMap;
 import com.forgeessentials.util.OutputHandler;
 import com.google.common.base.Throwables;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
@@ -78,12 +79,11 @@ public class ModuleContainer implements Comparable{
 		name = annot.name();
 		isCore = annot.isCore();
 		configClass = annot.configClass();
-		parentMod = annot.parentMod();
 		serverOnly = annot.serverOnly();
-
-		// try getting the parent mod.. and register it.
-		{
-			mod = handleMod(annot.parentMod());
+		
+		if (serverOnly && FMLCommonHandler.instance().getEffectiveSide().isClient()){
+			isLoadable = false;
+			OutputHandler.felog.warning("The module " + name + " has been coded to work on the dedicated server only. It will not be loaded.");
 		}
 
 		// check method annotation. they are all optional...
@@ -412,31 +412,5 @@ public class ModuleContainer implements Comparable{
 		ModuleContainer c = (ModuleContainer) o;
 
 		return isCore == c.isCore && name.equals(c.name) && className.equals(c.className);
-	}
-
-	private static Object handleMod(Class c)
-	{
-		String modid;
-		Object obj = null;
-
-		ModContainer contain = null;
-		for (ModContainer container : Loader.instance().getModList())
-			if (container.getMod() != null && container.getMod().getClass().equals(c))
-			{
-				contain = container;
-				obj = container.getMod();
-				break;
-			}
-
-		if (obj == null || contain == null)
-			throw new RuntimeException(c + " isn't an loaded mod class!");
-
-		modid = contain.getModId() + "--" + contain.getVersion();
-
-		if (modClasses.add(c))
-		{
-			OutputHandler.felog.info("Loading modules");
-		}
-		return obj;
 	}
 }
