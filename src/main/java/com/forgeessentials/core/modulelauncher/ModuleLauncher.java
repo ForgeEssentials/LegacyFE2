@@ -1,4 +1,4 @@
-package com.forgeessentials.core.bootstrap.modulelauncher;
+package com.forgeessentials.core.modulelauncher;
 
 import java.io.File;
 import java.util.Collection;
@@ -7,7 +7,10 @@ import java.util.TreeMap;
 
 import net.minecraft.command.ICommandSender;
 
+import com.forgeessentials.api.APIRegistry.ForgeEssentialsRegistrar;
 import com.forgeessentials.core.ForgeEssentials;
+import com.forgeessentials.core.modulelauncher.util.CallableMap;
+import com.forgeessentials.util.OutputHandler;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
@@ -17,6 +20,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 public class ModuleLauncher {
@@ -126,7 +130,7 @@ public class ModuleLauncher {
 		boolean generate = false;
 		for (ModuleContainer module : modules)
 		{
-			ModuleConfigBase cfg = module.getConfig();
+			BaseConfig cfg = module.getConfig();
 
 			if (cfg != null)
 			{
@@ -144,7 +148,7 @@ public class ModuleLauncher {
 				}
 
 				cfg.setGenerate(generate);
-				cfg.init();
+				cfg.load();
 			}
 		}
 	}
@@ -188,18 +192,23 @@ public class ModuleLauncher {
 			module.runServerStop(e);
 		}
 	}
+	
+	public void serverStopped(FMLServerStoppedEvent e){
+		for (ModuleContainer module : containerMap.values()){
+			module.runServerStopped(e);
+		}
+	}
 
 	public void reloadConfigs(ICommandSender sender)
 	{
-		ModuleConfigBase config;
+		BaseConfig config;
 		for (ModuleContainer module : containerMap.values())
 		{
 			config = module.getConfig();
 			if (config != null)
 			{
-				config.forceLoad(sender);
+				config.load();
 			}
-			module.runReload(sender);
 		}
 	}
 
@@ -209,4 +218,4 @@ public class ModuleLauncher {
 	}
 }
 
-}
+
