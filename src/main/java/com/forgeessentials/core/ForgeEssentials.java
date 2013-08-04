@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.forgeessentials.core.bootstrap.FETweaker;
 import com.forgeessentials.core.modulelauncher.ModuleLauncher;
-import com.forgeessentials.core.util.BukkitChecker;
+import com.forgeessentials.core.util.SystemChecker;
 import com.forgeessentials.util.OutputHandler;
 
 import cpw.mods.fml.common.Mod;
@@ -41,7 +41,7 @@ public class ForgeEssentials {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e){
-		BukkitChecker.run();
+		SystemChecker.run();
 		out = new OutputHandler(e.getModLog());
 		mdlaunch = new ModuleLauncher();
 		mdlaunch.preLoad(e);

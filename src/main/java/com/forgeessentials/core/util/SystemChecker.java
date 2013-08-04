@@ -4,7 +4,7 @@ import com.forgeessentials.util.OutputHandler;
 
 import cpw.mods.fml.common.Loader;
 
-public class BukkitChecker {
+public class SystemChecker {
 	public static void run(){
 		// Check for BukkitForge
 				if (Loader.isModLoaded("BukkitForge"))
@@ -32,6 +32,8 @@ public class BukkitChecker {
 						// Safe!
 					}
 				}
+				//Now check if libs are present
 	}
+				
 
 }

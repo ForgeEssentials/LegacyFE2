@@ -16,6 +16,7 @@ public class CoreMiscConfig extends BaseConfig {
 	
 	public CoreMiscConfig(File file) {
 		super(file);
+		config = new Configuration(file);
 		load();
 	}
 

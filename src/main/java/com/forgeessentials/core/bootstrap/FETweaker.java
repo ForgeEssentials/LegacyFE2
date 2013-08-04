@@ -2,11 +2,14 @@ package com.forgeessentials.core.bootstrap;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+
+import com.google.common.collect.Multiset.Entry;
 
 public class FETweaker implements ITweaker {
 
@@ -26,13 +29,13 @@ public class FETweaker implements ITweaker {
 
 	@Override
 	public String[] getLaunchArguments() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> args = new ArrayList<String>();
+
+        return args.toArray(new String[args.size()]);
 	}
 
 	@Override
 	public String getLaunchTarget() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
