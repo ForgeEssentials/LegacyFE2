@@ -1,15 +1,18 @@
 package com.forgeessentials.core;
 
 import java.io.File;
+import java.util.Arrays;
 
-import com.forgeessentials.core.bootstrap.FETweaker;
+import com.forgeessentials.core.bootstrap.FEClassLoader;
 import com.forgeessentials.core.modulelauncher.ModuleLauncher;
 import com.forgeessentials.core.util.SystemChecker;
 import com.forgeessentials.util.OutputHandler;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.DummyModContainer;
+import cpw.mods.fml.common.LoadController;
+import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -17,7 +20,6 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 
 /**
  * Main FE class, only triggers module launching.
@@ -27,46 +29,64 @@ import cpw.mods.fml.common.network.NetworkMod;
  *
  */
 
-@Mod(modid = "ForgeEssentials", name = "Forge Essentials", version = "2.0pre1")
-@NetworkMod(clientSideRequired = false, serverSideRequired = false)
-public class ForgeEssentials {
+public class ForgeEssentials extends DummyModContainer{
 	
-	@Instance("ForgeEssentials")
-	public static ForgeEssentials instance;
+	public static ForgeEssentials instance = new ForgeEssentials();
 	
 	private ModuleLauncher mdlaunch;
 	private OutputHandler out;
 	
-	public static File FEDIR = FETweaker.getFEDir();
+	public static File FEDIR = FEClassLoader.FEDIR;
 	
-	@EventHandler
+	public ForgeEssentials()
+	{
+		super(new ModMetadata());
+		/* ModMetadata is the same as mcmod.info */
+		ModMetadata myMeta = super.getMetadata();
+		myMeta.authorList = Arrays.asList(new String[]
+		{ "AbrarSyed", "Dries007", "luacs1998" });
+		myMeta.description = "";
+		myMeta.modId = "ForgeEssentials";
+		myMeta.version = "2.0pre1";
+		myMeta.name = "Forge Essentials";
+		myMeta.url = "";
+	}
+
+	@Override
+	public boolean registerBus(EventBus bus, LoadController controller)
+	{
+		bus.register(this);
+		return true;
+	}
+	
+	@Subscribe
 	public void preInit(FMLPreInitializationEvent e){
 		SystemChecker.run();
 		out = new OutputHandler(e.getModLog());
 		mdlaunch = new ModuleLauncher();
 		mdlaunch.preLoad(e);
 	}
-	@EventHandler
+	@Subscribe
 	public void init(FMLInitializationEvent e){
 		mdlaunch.load(e);
 	}
-	@EventHandler
+	@Subscribe
 	public void postInit(FMLPostInitializationEvent e){
 		mdlaunch.postLoad(e);
 	}
-	@EventHandler
+	@Subscribe
 	public void serverStarting(FMLServerStartingEvent e){
 		mdlaunch.serverStarting(e);
 	}
-	@EventHandler
+	@Subscribe
 	public void serverStarted(FMLServerStartedEvent e){
 		mdlaunch.serverStarted(e);
 	}
-	@EventHandler
+	@Subscribe
 	public void serverStopping(FMLServerStoppingEvent e){
 		mdlaunch.serverStopping(e);
 	}
-	@EventHandler
+	@Subscribe
 	public void serverStopped(FMLServerStoppedEvent e){
 		mdlaunch.serverStopped(e);
 	}
