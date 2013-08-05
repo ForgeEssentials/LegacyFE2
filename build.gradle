@@ -1,6 +1,6 @@
 buildscript {
 	repositories { mavenCentral() }
-	dependencies { classpath 'com.github.abrarsyed.gmcp:GMCP:0.6.2' }
+	dependencies { classpath 'com.github.abrarsyed.gmcp:GMCP:0.7.3' }
 }
 
 apply plugin: "gmcp"
@@ -12,7 +12,10 @@ minecraft.minecraftVersion = '1.6.2'
 
 processResources{}
 
-jar { appendix = 'universal' }
+jar { appendix = 'universal' 
+manifest {
+        attributes("FMLCorePlugin": "com.forgeessentials.core.bootstrap.FELoadingPlugin")
+    }}
 
 task sourceJar(type: Jar) {
 	from sourceSets.main.allSource
