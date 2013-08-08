@@ -57,7 +57,7 @@ public class FEClassLoader implements IFMLCallHook {
         }
 		if (data.containsKey("mclocation") && data.get("mclocation") != null)
         {
-            FEDIR = new File(data.get("mclocation") + "ForgeEssentials/");
+            FEDIR = new File(data.get("mclocation") + "/ForgeEssentials/");
         }
 	}
 

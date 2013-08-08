@@ -1,14 +1,11 @@
 package com.forgeessentials.core.misc;
 
 import java.io.File;
-import java.util.logging.Level;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
-import com.forgeessentials.core.ForgeEssentials;
 import com.forgeessentials.core.modulelauncher.BaseConfig;
-import com.forgeessentials.util.OutputHandler;
 
 public class CoreMiscConfig extends BaseConfig {
 	

@@ -4,7 +4,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.forgeessentials.core.modulelauncher.FEComponent;
 import com.forgeessentials.core.modulelauncher.FEComponent.FEModuleEventHandler;
-import com.forgeessentials.util.OutputHandler;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;

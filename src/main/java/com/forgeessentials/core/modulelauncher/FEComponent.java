@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.forgeessentials.core.ForgeEssentials;
-
 /**
  * This annotation will be used generically as a replacement for @FEModule in 1.x.
  * @author luacs1998
