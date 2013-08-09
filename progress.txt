@@ -1,0 +1,11 @@
+Done:
+Some parts of core
+Some parts of util
+Data API
+Some parts of open API
+
+Not yet done:
+The rest of core, util
+Permissions
+Modules
+The rest of open API
