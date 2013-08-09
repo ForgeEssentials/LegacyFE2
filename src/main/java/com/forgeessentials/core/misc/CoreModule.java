@@ -10,13 +10,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @FEComponent(name = "Misc", isCore = false, serverOnly = false, version = "2.0pre1", configClass = CoreMiscConfig.class)
 public class CoreModule {
-	
+
 	public static String modlistLocation;
-	
+
 	private MajoritySleepHandler sleep;
-	
+
 	@FEModuleEventHandler
-	public void load(FMLInitializationEvent e){
+	public void load(FMLInitializationEvent e) {
 		GameRegistry.registerPlayerTracker(new MOTDHandler());
 		MinecraftForge.EVENT_BUS.register(new MajoritySleepHandler());
 	}

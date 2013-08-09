@@ -16,204 +16,159 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class CallableMap
-{
-	private HashMultimap<String, FECallable>	callables;
+public class CallableMap {
+	private HashMultimap<String, FECallable> callables;
 
-	public CallableMap()
-	{
+	public CallableMap() {
 		callables = HashMultimap.create();
 	}
 
-	public void scanObject(Object obj)
-	{
+	public void scanObject(Object obj) {
 		if (obj == null)
 			return;
 
-		try
-		{
+		try {
 			FECallable call;
 			Class c = obj.getClass();
-			if (obj instanceof ModContainer)
-			{
+			if (obj instanceof ModContainer) {
 				c = ((ModContainer) obj).getMod().getClass();
-			}
-			else if (obj instanceof ModuleContainer)
-			{
+			} else if (obj instanceof ModuleContainer) {
 				c = ((ModuleContainer) obj).module.getClass();
 			}
 
-			for (Method m : c.getDeclaredMethods())
-			{
-				if (m.isAnnotationPresent(SideOnly.class))
-				{
+			for (Method m : c.getDeclaredMethods()) {
+				if (m.isAnnotationPresent(SideOnly.class)) {
 					SideOnly annot = m.getAnnotation(SideOnly.class);
-					if (!annot.value().equals(FMLCommonHandler.instance().getSide()))
-					{
+					if (!annot.value().equals(
+							FMLCommonHandler.instance().getSide())) {
 						continue;
 					}
 				}
 
-				if (Modifier.isStatic(m.getModifiers()))
-				{
+				if (Modifier.isStatic(m.getModifiers())) {
 					call = new FECallable(m);
-				}
-				else
-				{
+				} else {
 					call = new FECallable(m, obj);
 				}
 
-				for (Annotation annot : m.getAnnotations())
-				{
+				for (Annotation annot : m.getAnnotations()) {
 					String name = annot.annotationType().getName();
 					callables.put(name, call);
 				}
 			}
-		}
-		catch (Throwable e)
-		{
-			OutputHandler.felog.severe("Error stripping methods from class! " + obj.getClass().getName());
+		} catch (Throwable e) {
+			OutputHandler.felog.severe("Error stripping methods from class! "
+					+ obj.getClass().getName());
 		}
 	}
 
-	public void scanClass(Class<?> c)
-	{
+	public void scanClass(Class<?> c) {
 		if (c == null)
 			return;
 
-		try
-		{
+		try {
 			FECallable call;
 
-			for (Method m : c.getDeclaredMethods())
-			{
-				if (m.isAnnotationPresent(SideOnly.class))
-				{
+			for (Method m : c.getDeclaredMethods()) {
+				if (m.isAnnotationPresent(SideOnly.class)) {
 					SideOnly annot = m.getAnnotation(SideOnly.class);
-					if (!annot.value().equals(FMLCommonHandler.instance().getSide()))
-					{
+					if (!annot.value().equals(
+							FMLCommonHandler.instance().getSide())) {
 						continue;
 					}
 				}
 
-				if (!Modifier.isStatic(m.getModifiers()))
-				{
+				if (!Modifier.isStatic(m.getModifiers())) {
 					continue;
 				}
 
 				call = new FECallable(m);
 
-				for (Annotation annot : m.getAnnotations())
-				{
+				for (Annotation annot : m.getAnnotations()) {
 					String name = annot.annotationType().getName();
 					callables.put(name, call);
 				}
 			}
-		}
-		catch (Throwable e)
-		{
-			OutputHandler.felog.severe("Error stripping methods from class! " + c.getName());
+		} catch (Throwable e) {
+			OutputHandler.felog.severe("Error stripping methods from class! "
+					+ c.getName());
 		}
 	}
 
-	public Set<FECallable> getCallable(Class<? extends Annotation> annot)
-	{
+	public Set<FECallable> getCallable(Class<? extends Annotation> annot) {
 		return callables.get(annot.getName());
 	}
 
-	public Set<FECallable> getCallable(String annotName)
-	{
+	public Set<FECallable> getCallable(String annotName) {
 		return callables.get(annotName);
 	}
 
-	public final class FECallable
-	{
-		private Method	method;
-		private Object	instance	= null;
-		private String	ident;
+	public final class FECallable {
+		private Method method;
+		private Object instance = null;
+		private String ident;
 
-		private FECallable(Method m, Object instance)
-		{
+		private FECallable(Method m, Object instance) {
 			this(m);
 
-			if (instance == null)
-			{
+			if (instance == null) {
 				this.instance = instance;
-			}
-			else if (instance instanceof ModContainer)
-			{
+			} else if (instance instanceof ModContainer) {
 				this.instance = ((ModContainer) instance).getMod();
 				ident = ((ModContainer) instance).getModId();
-			}
-			else if (instance instanceof ModuleContainer)
-			{
+			} else if (instance instanceof ModuleContainer) {
 				this.instance = ((ModuleContainer) instance).module;
 				ident = ((ModuleContainer) instance).name;
-			}
-			else
-			{
+			} else {
 				this.instance = instance;
 			}
 
 		}
 
-		private FECallable(Method m)
-		{
+		private FECallable(Method m) {
 			method = m;
 
 			Class<?> c = m.getDeclaringClass();
-			if (c.isAnnotationPresent(Mod.class))
-			{
+			if (c.isAnnotationPresent(Mod.class)) {
 				ident = c.getAnnotation(Mod.class).modid();
-			}
-			else if (c.isAnnotationPresent(FEComponent.class))
-			{
+			} else if (c.isAnnotationPresent(FEComponent.class)) {
 				ident = c.getAnnotation(FEComponent.class).name();
-			}
-			else
-			{
+			} else {
 				ident = "UNKNOWN";
 			}
 		}
 
-		public boolean isStatic()
-		{
+		public boolean isStatic() {
 			return instance == null;
 		}
 
-		public boolean hasReturn()
-		{
+		public boolean hasReturn() {
 			return !method.getReturnType().equals(void.class);
 		}
 
-		public Class<?> getReturn()
-		{
+		public Class<?> getReturn() {
 			return method.getReturnType();
 		}
 
-		public Class<?>[] getParameters()
-		{
+		public Class<?>[] getParameters() {
 			return method.getParameterTypes();
 		}
 
-		public Object call(Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
-		{
+		public Object call(Object... args) throws IllegalAccessException,
+				IllegalArgumentException, InvocationTargetException {
 			method.setAccessible(true);
 			return method.invoke(instance, args);
 		}
 
-		public Annotation getAnnotation(Class annot)
-		{
+		public Annotation getAnnotation(Class annot) {
 			return method.getAnnotation(annot);
 		}
 
-		public Annotation getClassAnnotation(Class annot)
-		{
+		public Annotation getClassAnnotation(Class annot) {
 			return method.getDeclaringClass().getAnnotation(annot);
 		}
 
-		public String getIdent()
-		{
+		public String getIdent() {
 			return ident;
 		}
 

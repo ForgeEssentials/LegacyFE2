@@ -4,12 +4,11 @@ import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public interface IDataDriver {
-	
-	public enum EnumDriverType
-	{
+
+	public enum EnumDriverType {
 		TEXT, BINARY, SQL;
 	}
-	
+
 	void onClassRegistered(ITypeInfo<?> tagger);
 
 	String getName();

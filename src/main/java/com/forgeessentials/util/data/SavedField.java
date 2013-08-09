@@ -1,24 +1,21 @@
 package com.forgeessentials.util.data;
 
 public class SavedField {
-	public String	name;
-	public Object	value;
-	public Class<?>	type;
+	public String name;
+	public Object value;
+	public Class<?> type;
 
-	public SavedField()
-	{
+	public SavedField() {
 	}
 
-	public SavedField(String name, Object value)
-	{
+	public SavedField(String name, Object value) {
 		this.name = name;
 		this.value = value;
 		type = value.getClass();
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "{" + name + ", " + type + ", " + value + "}";
 	}
 

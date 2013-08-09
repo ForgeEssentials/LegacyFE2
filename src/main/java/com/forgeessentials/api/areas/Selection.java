@@ -1,13 +1,11 @@
-package com.forgeessentials.util.areas;
+package com.forgeessentials.api.areas;
 
-public class Selection extends AreaBase
-{
+public class Selection extends AreaBase {
 	// only really used for copying.. the points it was defined from.
-	private Point	start;	// start selection
-	private Point	end;	// end selection
+	private Point start; // start selection
+	private Point end; // end selection
 
-	public Selection(Point point1, Point point2)
-	{
+	public Selection(Point point1, Point point2) {
 		super(point1, point2);
 		start = point1;
 		start.validate();
@@ -15,25 +13,21 @@ public class Selection extends AreaBase
 		point2.validate();
 	}
 
-	public Point getStart()
-	{
+	public Point getStart() {
 		return start;
 	}
 
-	public Point getEnd()
-	{
+	public Point getEnd() {
 		return end;
 	}
 
-	public void setStart(Point start)
-	{
+	public void setStart(Point start) {
 		this.start = start;
 		start.validate();
 		redefine(this.start, end);
 	}
 
-	public void setEnd(Point end)
-	{
+	public void setEnd(Point end) {
 		this.end = end;
 		end.validate();
 		redefine(start, this.end);

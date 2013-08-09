@@ -9,26 +9,23 @@ import com.forgeessentials.util.data.api.IReconstructData;
 import com.forgeessentials.util.data.api.ITypeInfo;
 import com.forgeessentials.util.data.api.TypeData;
 
-public class TypeInfoItemStack implements ITypeInfo<ItemStack>
-{
-	private static final String	SIZE		= "stackSize";
-	private static final String	ITEM		= "itemID";
-	private static final String	DAMAGE		= "damage";
-	private static final String	COMPOUND	= "compound";
+public class TypeInfoItemStack implements ITypeInfo<ItemStack> {
+	private static final String SIZE = "stackSize";
+	private static final String ITEM = "itemID";
+	private static final String DAMAGE = "damage";
+	private static final String COMPOUND = "compound";
 
-	public TypeInfoItemStack()
-	{
+	public TypeInfoItemStack() {
 	}
 
 	@Override
-	public void build()
-	{
+	public void build() {
 	}
 
 	@Override
-	public TypeData getTypeDataFromObject(ItemStack stack)
-	{
-		TypeData data = DataStorageManager.getDataForType(new ClassContainer(ItemStack.class));
+	public TypeData getTypeDataFromObject(ItemStack stack) {
+		TypeData data = DataStorageManager.getDataForType(new ClassContainer(
+				ItemStack.class));
 
 		data.putField(SIZE, stack.stackSize);
 		data.putField(ITEM, stack.itemID);
@@ -39,11 +36,11 @@ public class TypeInfoItemStack implements ITypeInfo<ItemStack>
 	}
 
 	@Override
-	public ClassContainer getTypeOfField(String field)
-	{
+	public ClassContainer getTypeOfField(String field) {
 		if (field == null)
 			return null;
-		else if (field.equalsIgnoreCase(SIZE) || field.equalsIgnoreCase(DAMAGE) || field.equalsIgnoreCase(ITEM))
+		else if (field.equalsIgnoreCase(SIZE) || field.equalsIgnoreCase(DAMAGE)
+				|| field.equalsIgnoreCase(ITEM))
 			return new ClassContainer(int.class);
 		else if (field.equalsIgnoreCase(COMPOUND))
 			return new ClassContainer(NBTTagCompound.class);
@@ -52,19 +49,12 @@ public class TypeInfoItemStack implements ITypeInfo<ItemStack>
 	}
 
 	@Override
-	public String[] getFieldList()
-	{
-		return new String[] {
-				SIZE,
-				ITEM,
-				DAMAGE,
-				COMPOUND
-		};
+	public String[] getFieldList() {
+		return new String[] { SIZE, ITEM, DAMAGE, COMPOUND };
 	}
 
 	@Override
-	public ItemStack reconstruct(IReconstructData data)
-	{
+	public ItemStack reconstruct(IReconstructData data) {
 		int size = (Integer) data.getFieldValue(SIZE);
 		int item = (Integer) data.getFieldValue(ITEM);
 		int damage = (Integer) data.getFieldValue(DAMAGE);
@@ -79,26 +69,22 @@ public class TypeInfoItemStack implements ITypeInfo<ItemStack>
 	}
 
 	@Override
-	public boolean canSaveInline()
-	{
+	public boolean canSaveInline() {
 		return true;
 	}
 
 	@Override
-	public ClassContainer getType()
-	{
+	public ClassContainer getType() {
 		return new ClassContainer(ItemStack.class);
 	}
 
 	@Override
-	public Class<?>[] getGenericTypes()
-	{
+	public Class<?>[] getGenericTypes() {
 		return null;
 	}
 
 	@Override
-	public ITypeInfo<?> getInfoForField(String field)
-	{
+	public ITypeInfo<?> getInfoForField(String field) {
 		return DataStorageManager.getInfoForType(getTypeOfField(field));
 	}
 

@@ -14,14 +14,13 @@ import com.forgeessentials.util.data.api.TypeData;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-public abstract class TextDataDriver extends AbstractDataDriver
-{
-	protected File	baseFile;
-	private boolean	useFEBase	= false;
+public abstract class TextDataDriver extends AbstractDataDriver {
+	protected File baseFile;
+	private boolean useFEBase = false;
 
 	@Override
-	public final void loadFromConfigs(Configuration config, String category) throws Exception
-	{
+	public final void loadFromConfigs(Configuration config, String category)
+			throws Exception {
 		Property prop;
 
 		String cat = category.substring(0, category.lastIndexOf('.'));
@@ -35,56 +34,50 @@ public abstract class TextDataDriver extends AbstractDataDriver
 	}
 
 	@Override
-	public final void serverStart(FMLServerStartingEvent e)
-	{
+	public final void serverStart(FMLServerStartingEvent e) {
 		String worldName = e.getServer().getFolderName();
 
-		if (useFEBase)
-		{
-			baseFile = new File(ForgeEssentials.FEDIR, "saves/" + getName() + "/" + worldName + "/");
-		}
-		else
-		{
+		if (useFEBase) {
+			baseFile = new File(ForgeEssentials.FEDIR, "saves/" + getName()
+					+ "/" + worldName + "/");
+		} else {
 			File parent = new File("./");
 
-			if (FMLCommonHandler.instance().getSide().isClient())
-			{
+			if (FMLCommonHandler.instance().getSide().isClient()) {
 				parent = new File("./saves/");
 			}
 
-			baseFile = new File(parent, worldName + "/FEData/" + getName() + "/");
+			baseFile = new File(parent, worldName + "/FEData/" + getName()
+					+ "/");
 		}
 	}
 
-	protected final File getTypePath(ClassContainer type)
-	{
+	protected final File getTypePath(ClassContainer type) {
 		return new File(baseFile, type.getFileSafeName() + "/");
 	}
 
-	protected File getFilePath(ClassContainer type, String uniqueKey)
-	{
-		return new File(getTypePath(type).getPath(), uniqueKey + "." + getExtension());
+	protected File getFilePath(ClassContainer type, String uniqueKey) {
+		return new File(getTypePath(type).getPath(), uniqueKey + "."
+				+ getExtension());
 	}
 
 	/**
 	 * @return extension of the file. omit the preceding period, its
-	 * automatically added. eg txt, cfg, dat, yml, etc...
+	 *         automatically added. eg txt, cfg, dat, yml, etc...
 	 */
 	protected abstract String getExtension();
 
 	@Override
-	protected TypeData[] loadAll(ClassContainer type)
-	{
+	protected TypeData[] loadAll(ClassContainer type) {
 		File[] files = getTypePath(type).listFiles();
 		ArrayList<IReconstructData> data = new ArrayList<IReconstructData>();
 
-		if (files != null)
-		{
-			for (File file : files)
-			{
-				if (!file.isDirectory() && file.getName().endsWith("." + getExtension()))
-				{
-					data.add(loadData(type, file.getName().replace("." + getExtension(), "")));
+		if (files != null) {
+			for (File file : files) {
+				if (!file.isDirectory()
+						&& file.getName().endsWith("." + getExtension())) {
+					data.add(loadData(type,
+							file.getName().replace("." + getExtension(), "")));
 				}
 			}
 		}
@@ -93,13 +86,11 @@ public abstract class TextDataDriver extends AbstractDataDriver
 	}
 
 	@Override
-	protected final boolean deleteData(ClassContainer type, String uniqueKey)
-	{
+	protected final boolean deleteData(ClassContainer type, String uniqueKey) {
 		boolean isSuccess = false;
 		File f = getFilePath(type, uniqueKey);
 
-		if (f.exists())
-		{
+		if (f.exists()) {
 			isSuccess = true;
 			f.delete();
 		}
@@ -108,8 +99,7 @@ public abstract class TextDataDriver extends AbstractDataDriver
 	}
 
 	@Override
-	public final EnumDriverType getType()
-	{
+	public final EnumDriverType getType() {
 		return EnumDriverType.TEXT;
 	}
 

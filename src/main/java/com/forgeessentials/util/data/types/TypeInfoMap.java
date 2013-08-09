@@ -13,33 +13,28 @@ import com.forgeessentials.util.data.api.IReconstructData;
 import com.forgeessentials.util.data.api.TypeData;
 import com.forgeessentials.util.data.api.TypeMultiValInfo;
 
-public class TypeInfoMap extends TypeMultiValInfo
-{
-	public static final String	KEY	= "key";
-	public static final String	VAL	= "value";
+public class TypeInfoMap extends TypeMultiValInfo {
+	public static final String KEY = "key";
+	public static final String VAL = "value";
 
-	public TypeInfoMap(ClassContainer container)
-	{
+	public TypeInfoMap(ClassContainer container) {
 		super(container);
 	}
 
 	@Override
-	public void buildEntry(HashMap<String, ClassContainer> fields)
-	{
+	public void buildEntry(HashMap<String, ClassContainer> fields) {
 		fields.put(KEY, new ClassContainer(container.getParameters()[0]));
 		fields.put(VAL, new ClassContainer(container.getParameters()[1]));
 	}
 
 	@Override
-	public Set<TypeData> getTypeDatasFromObject(Object obj)
-	{
+	public Set<TypeData> getTypeDatasFromObject(Object obj) {
 		HashSet<TypeData> datas = new HashSet<TypeData>();
 
 		Set<Entry> list = ((Map) obj).entrySet();
 
 		TypeData data;
-		for (Entry e : list)
-		{
+		for (Entry e : list) {
 			data = getEntryData();
 			data.putField(KEY, e.getKey());
 			data.putField(VAL, e.getValue());
@@ -50,27 +45,22 @@ public class TypeInfoMap extends TypeMultiValInfo
 	}
 
 	@Override
-	public String getEntryName()
-	{
+	public String getEntryName() {
 		return "Entry";
 	}
 
 	@Override
-	public Object reconstruct(TypeData[] data, IReconstructData rawType)
-	{
+	public Object reconstruct(TypeData[] data, IReconstructData rawType) {
 		Map map = new HashMap();
-		try
-		{
+		try {
 			map = (Map) container.getType().newInstance();
-		}
-		catch (Exception e)
-		{
-			OutputHandler.felog.log(Level.SEVERE, "Error instantiating " + container.getType().getCanonicalName() + "!", e);
+		} catch (Exception e) {
+			OutputHandler.felog.log(Level.SEVERE, "Error instantiating "
+					+ container.getType().getCanonicalName() + "!", e);
 			return null;
 		}
 
-		for (TypeData dat : data)
-		{
+		for (TypeData dat : data) {
 			map.put(dat.getFieldValue(KEY), dat.getFieldValue(VAL));
 		}
 

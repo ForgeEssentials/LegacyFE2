@@ -1,4 +1,4 @@
-package com.forgeessentials.util.areas;
+package com.forgeessentials.api.areas;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,34 +10,34 @@ import com.forgeessentials.util.data.api.SaveableObject.SaveableField;
 import com.forgeessentials.util.data.api.SaveableObject.UniqueLoadingKey;
 
 @SaveableObject(SaveInline = true)
-public class WarpPoint extends WorldPoint
-{
+public class WarpPoint extends WorldPoint {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= -1534182424702360150L;
+	private static final long serialVersionUID = -1534182424702360150L;
 
 	@SaveableField
-	public float				pitch;
+	public float pitch;
 
 	@SaveableField
-	public float				yaw;
+	public float yaw;
 
 	// stops the coords from Point to be saved.
 	@SaveableField(overrideParent = "x")
-	public double				xd;
+	public double xd;
 
 	// stops the coords from Point to be saved.
 	@SaveableField(overrideParent = "y")
-	public double				yd;
+	public double yd;
 
 	// stops the coords from Point to be saved.
 	@SaveableField(overrideParent = "z")
-	public double				zd;
+	public double zd;
 
-	public WarpPoint(int dimension, double x, double y, double z, float playerPitch, float playerYaw)
-	{
-		super(dimension, (int) Math.round(x), (int) Math.round(y), (int) Math.round(z));
+	public WarpPoint(int dimension, double x, double y, double z,
+			float playerPitch, float playerYaw) {
+		super(dimension, (int) Math.round(x), (int) Math.round(y), (int) Math
+				.round(z));
 		xd = x;
 		yd = y;
 		zd = z;
@@ -45,24 +45,21 @@ public class WarpPoint extends WorldPoint
 		yaw = playerYaw;
 	}
 
-	public WarpPoint(Point p, int dimension, float playerPitch, float playerYaw)
-	{
+	public WarpPoint(Point p, int dimension, float playerPitch, float playerYaw) {
 		this(dimension, p.x, p.y, p.z, playerPitch, playerYaw);
 		xd = x;
 		yd = y;
 		zd = z;
 	}
 
-	public WarpPoint(WorldPoint p, float playerPitch, float playerYaw)
-	{
+	public WarpPoint(WorldPoint p, float playerPitch, float playerYaw) {
 		this(p.dim, p.x, p.y, p.z, playerPitch, playerYaw);
 		xd = x;
 		yd = y;
 		zd = z;
 	}
 
-	public WarpPoint(EntityPlayer sender)
-	{
+	public WarpPoint(EntityPlayer sender) {
 		super(sender);
 		xd = sender.posX;
 		yd = sender.posY;
@@ -73,41 +70,32 @@ public class WarpPoint extends WorldPoint
 
 	/**
 	 * This is calculated by the whichever has higher coords.
+	 * 
 	 * @return Posotive number if this Point is larger. 0 if they are equal.
-	 * Negative if the provided point is larger.
+	 *         Negative if the provided point is larger.
 	 */
-	public int compareTo(WarpPoint point)
-	{
+	public int compareTo(WarpPoint point) {
 		if (equals(point))
 			return 0;
 
 		int positives = 0;
 		int negatives = 0;
 
-		if (xd > point.xd)
-		{
+		if (xd > point.xd) {
 			positives++;
-		}
-		else
-		{
+		} else {
 			negatives++;
 		}
 
-		if (yd > point.yd)
-		{
+		if (yd > point.yd) {
 			positives++;
-		}
-		else
-		{
+		} else {
 			negatives++;
 		}
 
-		if (zd > point.zd)
-		{
+		if (zd > point.zd) {
 			positives++;
-		}
-		else
-		{
+		} else {
 			negatives++;
 		}
 
@@ -121,12 +109,13 @@ public class WarpPoint extends WorldPoint
 
 	/**
 	 * gets a new Point with the same data as the provided one.
+	 * 
 	 * @param point
 	 * @return
 	 */
-	public static WarpPoint copy(WarpPoint point)
-	{
-		return new WarpPoint(point.dim, point.xd, point.yd, point.zd, point.pitch, point.yaw);
+	public static WarpPoint copy(WarpPoint point) {
+		return new WarpPoint(point.dim, point.xd, point.yd, point.zd,
+				point.pitch, point.yaw);
 	}
 
 	/**
@@ -134,10 +123,8 @@ public class WarpPoint extends WorldPoint
 	 * negative.
 	 */
 	@Override
-	public void validate()
-	{
-		if (yd < 0)
-		{
+	public void validate() {
+		if (yd < 0) {
 			yd = 0;
 		}
 
@@ -148,23 +135,22 @@ public class WarpPoint extends WorldPoint
 	 * @param point
 	 * @return The distance to a given Block.
 	 */
-	public double getDistanceTo(WarpPoint point)
-	{
-		return Math.sqrt((xd - point.xd) * (xd - point.xd) + (yd - point.yd) * (yd - point.yd) + (zd - point.zd) * (zd - point.zd));
+	public double getDistanceTo(WarpPoint point) {
+		return Math.sqrt((xd - point.xd) * (xd - point.xd) + (yd - point.yd)
+				* (yd - point.yd) + (zd - point.zd) * (zd - point.zd));
 	}
 
 	/**
 	 * @param point
 	 * @return The distance to a given Block.
 	 */
-	public double getDistanceTo(Entity e)
-	{
-		return Math.sqrt((xd - e.posX) * (xd - e.posX) + (yd - e.posY) * (yd - e.posY) + (zd - e.posZ) * (zd - e.posZ));
+	public double getDistanceTo(Entity e) {
+		return Math.sqrt((xd - e.posX) * (xd - e.posX) + (yd - e.posY)
+				* (yd - e.posY) + (zd - e.posZ) * (zd - e.posZ));
 	}
 
 	@Reconstructor()
-	public static WarpPoint reconstruct(IReconstructData tag)
-	{
+	public static WarpPoint reconstruct(IReconstructData tag) {
 		double x = (Double) tag.getFieldValue("xd");
 		double y = (Double) tag.getFieldValue("yd");
 		double z = (Double) tag.getFieldValue("zd");
@@ -175,15 +161,14 @@ public class WarpPoint extends WorldPoint
 	}
 
 	@UniqueLoadingKey()
-	private String getLoadingField()
-	{
+	private String getLoadingField() {
 		return "WarpPoint" + this;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "WarpPoint[" + dim + "," + xd + "," + yd + "," + zd + "," + pitch + "," + yaw + "]";
+	public String toString() {
+		return "WarpPoint[" + dim + "," + xd + "," + yd + "," + zd + ","
+				+ pitch + "," + yaw + "]";
 	}
 
 }

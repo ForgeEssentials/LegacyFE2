@@ -8,9 +8,9 @@ import net.minecraftforge.common.Property;
 import com.forgeessentials.core.modulelauncher.BaseConfig;
 
 public class CoreMiscConfig extends BaseConfig {
-	
+
 	private Configuration config;
-	
+
 	public CoreMiscConfig(File file) {
 		super(file);
 		config = new Configuration(file);
@@ -26,7 +26,7 @@ public class CoreMiscConfig extends BaseConfig {
 		prop = config.get("Misc", "MajoritySleep", true);
 		prop.comment = "If more than 50% of players sleep, make it day.";
 		prop.set(MajoritySleepHandler.MajoritySleep);
-		
+
 		prop = config.get("Misc", "UseMOTD", true);
 		prop.comment = "Send players the MOTD when they log in";
 		prop.set(MOTDHandler.showMOTD);
@@ -36,7 +36,8 @@ public class CoreMiscConfig extends BaseConfig {
 	@Override
 	public void load() {
 
-		config.addCustomCategoryComment("Misc", "Configure miscellaneous features of ForgeEssentials Core.");
+		config.addCustomCategoryComment("Misc",
+				"Configure miscellaneous features of ForgeEssentials Core.");
 
 		Property prop = config.get("Misc", "modlistLocation", "modlist.txt");
 		prop.comment = "Specify the file where the modlist will be written to. This path is relative to the ForgeEssentials folder.";
@@ -45,7 +46,7 @@ public class CoreMiscConfig extends BaseConfig {
 		prop = config.get("Misc", "MajoritySleep", true);
 		prop.comment = "If more than 50% of players sleep, make it day.";
 		MajoritySleepHandler.MajoritySleep = prop.getBoolean(true);
-		
+
 		prop = config.get("Misc", "UseMOTD", true);
 		prop.comment = "Send players the MOTD when they log in";
 		MOTDHandler.showMOTD = prop.getBoolean(true);

@@ -20,70 +20,60 @@ import com.forgeessentials.util.OutputHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 
-public class MOTDHandler implements IPlayerTracker{
-	
-	protected static boolean showMOTD;
-	private static ArrayList<String>	messageList	= new ArrayList<String>();
-	private static MinecraftServer		server		= FMLCommonHandler.instance().getMinecraftServerInstance();
+public class MOTDHandler implements IPlayerTracker {
 
+	protected static boolean showMOTD;
+	private static ArrayList<String> messageList = new ArrayList<String>();
+	private static MinecraftServer server = FMLCommonHandler.instance()
+			.getMinecraftServerInstance();
 
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		sendLoginMessage(player);
-		
+
 	}
 
 	@Override
 	public void onPlayerLogout(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPlayerChangedDimension(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	public static void loadFile()
-	{
+
+	public static void loadFile() {
 		messageList.clear();
 		File file = new File(ForgeEssentials.FEDIR, "MOTD.txt");
-		if (file.exists())
-		{
-			try
-			{
+		if (file.exists()) {
+			try {
 				FileReader fr = new FileReader(file);
 				BufferedReader br = new BufferedReader(fr);
 
-				while (br.ready())
-				{
+				while (br.ready()) {
 					String line = br.readLine().trim();
-					if (!(line.startsWith("#") || line.isEmpty()))
-					{
+					if (!(line.startsWith("#") || line.isEmpty())) {
 						messageList.add(line);
 					}
 				}
 
 				br.close();
 				fr.close();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				OutputHandler.felog.info("Error reading the MOTD file.");
 				e.printStackTrace();
 			}
-		}
-		else
-		{
-			try
-			{
+		} else {
+			try {
 				file.createNewFile();
 				PrintWriter pw = new PrintWriter(file);
 
@@ -98,7 +88,7 @@ public class MOTDHandler implements IPlayerTracker{
 				pw.println("# %groupPrefix% => Group prefix (see chat config)");
 				pw.println("# %groupSuffix% => Group suffix (see chat config)");
 				pw.println("# %playerPrefix% => Player prefix (see chat config)");
-                pw.println("# %playerSuffix% => Player suffix (see chat config)");
+				pw.println("# %playerSuffix% => Player suffix (see chat config)");
 				// pw.println("# %balance% => Prints the users balance (economy)");
 				pw.println("# %players% => Amount of players online.");
 				pw.println("# %uptime% => Current server uptime.");
@@ -115,9 +105,7 @@ public class MOTDHandler implements IPlayerTracker{
 				pw.println("Server time: %time%. Uptime: %uptime%");
 
 				pw.close();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				OutputHandler.felog.info("Error reading the MOTD file.");
 				e.printStackTrace();
 			}
@@ -125,102 +113,113 @@ public class MOTDHandler implements IPlayerTracker{
 		}
 	}
 
-	public static void sendLoginMessage(ICommandSender sender)
-	{
-		for (int id = 0; id < messageList.size(); id++)
-		{
-			if (id == 0)
-			{
-				//if (sender instanceof EntityPlayer)
-				//{
-				//	sender.sendChatToPlayer(CompatReiMinimap.reimotd((EntityPlayer) sender) + Format(messageList.get(id), sender.getCommandSenderName()));
-				//}
-				//else
-				//{
-					sender.sendChatToPlayer(Format(messageList.get(id), sender.getCommandSenderName()));
-				//}
-			}
-			else
-			{
-				sender.sendChatToPlayer(Format(messageList.get(id), sender.getCommandSenderName()));
+	public static void sendLoginMessage(ICommandSender sender) {
+		for (int id = 0; id < messageList.size(); id++) {
+			if (id == 0) {
+				// if (sender instanceof EntityPlayer)
+				// {
+				// sender.sendChatToPlayer(CompatReiMinimap.reimotd((EntityPlayer)
+				// sender) + Format(messageList.get(id),
+				// sender.getCommandSenderName()));
+				// }
+				// else
+				// {
+				sender.sendChatToPlayer(Format(messageList.get(id),
+						sender.getCommandSenderName()));
+				// }
+			} else {
+				sender.sendChatToPlayer(Format(messageList.get(id),
+						sender.getCommandSenderName()));
 			}
 		}
 	}
 
 	/**
 	 * Formats the chat, replacing given strings by their values
+	 * 
 	 * @param String
-	 * to parse the amount to add to the WalletHandler
+	 *            to parse the amount to add to the WalletHandler
 	 */
-	private static ChatMessageComponent Format(String line, String playerName)
-	{
+	private static ChatMessageComponent Format(String line, String playerName) {
 		/*
-		 * comment out first.. wait for other stuff
-		EntityPlayer player = FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName);
-		Calendar cal = Calendar.getInstance();
-
-		// int WalletHandler = WalletHandler.getWalletHandler(player); //needed to return WalletHandler info
-		line = FunctionHelper.formatColors(line); // colors...
-		line = FunctionHelper.format(line);
-
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%playername%", player.username); // username
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%players%", online()); // players online
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%uptime%", getUptime()); // uptime
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%uniqueplayers%", uniqueplayers()); // unique players		
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%online", FunctionHelper.getFormattedPlayersOnline()); // All online players
-
-		// time stuff
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%time%", FunctionHelper.getCurrentTimeString());
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%hour%", "" + cal.get(Calendar.HOUR));
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%min%", "" + cal.get(Calendar.MINUTE));
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%sec%", "" + cal.get(Calendar.SECOND));
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%day%", "" + cal.get(Calendar.DAY_OF_MONTH));
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%month%", "" + cal.get(Calendar.MONTH));
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%year%", "" + cal.get(Calendar.YEAR));
-
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%rank%", FunctionHelper.getGroupRankString(playerName));
-
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%groupPrefix%", FunctionHelper.formatColors(FunctionHelper.getGroupPrefixString(playerName)).trim());
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%groupSuffix%", FunctionHelper.formatColors(FunctionHelper.getGroupSuffixString(playerName)).trim());
-
-		PlayerInfo info = PlayerInfo.getPlayerInfo(playerName);
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%playerPrefix%", info.prefix == null ? "" : FunctionHelper.formatColors(info.prefix).trim());
-		line = FunctionHelper.replaceAllIgnoreCase(line, "%playerSuffix%", info.suffix == null ? "" : FunctionHelper.formatColors(info.suffix).trim());
-
-		*/
+		 * comment out first.. wait for other stuff EntityPlayer player =
+		 * FMLCommonHandler
+		 * .instance().getSidedDelegate().getServer().getConfigurationManager
+		 * ().getPlayerForUsername(playerName); Calendar cal =
+		 * Calendar.getInstance();
+		 * 
+		 * // int WalletHandler = WalletHandler.getWalletHandler(player);
+		 * //needed to return WalletHandler info line =
+		 * FunctionHelper.formatColors(line); // colors... line =
+		 * FunctionHelper.format(line);
+		 * 
+		 * line = FunctionHelper.replaceAllIgnoreCase(line, "%playername%",
+		 * player.username); // username line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%players%", online()); //
+		 * players online line = FunctionHelper.replaceAllIgnoreCase(line,
+		 * "%uptime%", getUptime()); // uptime line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%uniqueplayers%",
+		 * uniqueplayers()); // unique players line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%online",
+		 * FunctionHelper.getFormattedPlayersOnline()); // All online players
+		 * 
+		 * // time stuff line = FunctionHelper.replaceAllIgnoreCase(line,
+		 * "%time%", FunctionHelper.getCurrentTimeString()); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%hour%", "" +
+		 * cal.get(Calendar.HOUR)); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%min%", "" +
+		 * cal.get(Calendar.MINUTE)); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%sec%", "" +
+		 * cal.get(Calendar.SECOND)); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%day%", "" +
+		 * cal.get(Calendar.DAY_OF_MONTH)); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%month%", "" +
+		 * cal.get(Calendar.MONTH)); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%year%", "" +
+		 * cal.get(Calendar.YEAR));
+		 * 
+		 * line = FunctionHelper.replaceAllIgnoreCase(line, "%rank%",
+		 * FunctionHelper.getGroupRankString(playerName));
+		 * 
+		 * line = FunctionHelper.replaceAllIgnoreCase(line, "%groupPrefix%",
+		 * FunctionHelper
+		 * .formatColors(FunctionHelper.getGroupPrefixString(playerName
+		 * )).trim()); line = FunctionHelper.replaceAllIgnoreCase(line,
+		 * "%groupSuffix%",
+		 * FunctionHelper.formatColors(FunctionHelper.getGroupSuffixString
+		 * (playerName)).trim());
+		 * 
+		 * PlayerInfo info = PlayerInfo.getPlayerInfo(playerName); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%playerPrefix%",
+		 * info.prefix == null ? "" :
+		 * FunctionHelper.formatColors(info.prefix).trim()); line =
+		 * FunctionHelper.replaceAllIgnoreCase(line, "%playerSuffix%",
+		 * info.suffix == null ? "" :
+		 * FunctionHelper.formatColors(info.suffix).trim());
+		 */
 		return ChatMessageComponent.func_111066_d(line);
-		
-		
+
 	}
 
-	private static String online()
-	{
+	private static String online() {
 		int online = 0;
-		try
-		{
+		try {
 			online = server.getCurrentPlayerCount();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 		}
 		return "" + online;
 	}
 
-	private static String uniqueplayers()
-	{
+	private static String uniqueplayers() {
 		int logins = 0;
-		try
-		{
+		try {
 			logins = server.getConfigurationManager().getAvailablePlayerDat().length;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 		}
 		return "" + logins;
 	}
 
-	public static String getUptime()
-	{
+	public static String getUptime() {
 		RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
 		int secsIn = (int) (rb.getUptime() / 1000);
 		return FunctionHelper.parseTime(secsIn);

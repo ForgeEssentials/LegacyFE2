@@ -22,24 +22,21 @@ import com.forgeessentials.util.data.api.SaveableObject.Reconstructor;
 import com.forgeessentials.util.data.api.SaveableObject.SaveableField;
 import com.forgeessentials.util.data.api.SaveableObject.UniqueLoadingKey;
 
-public class TypeInfoStandard implements ITypeInfo<Object>
-{
-	Class<?>								type;
-	private boolean							isUniqueKeyField;
-	private boolean							inLine;
-	private String							uniqueKey;
-	private String							reconstructorMethod;
-	private HashMap<String, ClassContainer>	fields;
+public class TypeInfoStandard implements ITypeInfo<Object> {
+	Class<?> type;
+	private boolean isUniqueKeyField;
+	private boolean inLine;
+	private String uniqueKey;
+	private String reconstructorMethod;
+	private HashMap<String, ClassContainer> fields;
 
-	public TypeInfoStandard(Class<?> type)
-	{
+	public TypeInfoStandard(Class<?> type) {
 		this.type = type;
 		fields = new HashMap<String, ClassContainer>();
 	}
 
 	@Override
-	public void build()
-	{
+	public void build() {
 		SaveableObject AObj = type.getAnnotation(SaveableObject.class);
 		inLine = AObj.SaveInline();
 
@@ -52,63 +49,55 @@ public class TypeInfoStandard implements ITypeInfo<Object>
 		HashSet<String> overrides = new HashSet<String>();
 
 		// Iterate through this class and superclass's and get saveable fields
-		do
-		{
+		do {
 			// Locate all members that are saveable.
-			for (Field f : currentType.getDeclaredFields())
-			{
-				if (overrides.contains(f.getName()))
-				{
+			for (Field f : currentType.getDeclaredFields()) {
+				if (overrides.contains(f.getName())) {
 					overrides.remove(f.getName());
 					continue;
 				}
 
 				// if its a saveable field
-				if (f.isAnnotationPresent(SaveableField.class))
-				{
+				if (f.isAnnotationPresent(SaveableField.class)) {
 					info = f.getAnnotation(SaveableField.class);
 
 					// register ignoire classes....
-					if (info != null && !info.overrideParent().isEmpty())
-					{
+					if (info != null && !info.overrideParent().isEmpty()) {
 						overrides.add(info.overrideParent());
 					}
 
 					tempType = f.getType();
 					aTempType = f.getGenericType();
-					if (aTempType instanceof ParameterizedType)
-					{
-						Type[] types = ((ParameterizedType) aTempType).getActualTypeArguments();
+					if (aTempType instanceof ParameterizedType) {
+						Type[] types = ((ParameterizedType) aTempType)
+								.getActualTypeArguments();
 						Class<?>[] params = new Class[types.length];
-						for (int i = 0; i < types.length; i++)
-						{
-							if (types[i] instanceof Class)
-							{
+						for (int i = 0; i < types.length; i++) {
+							if (types[i] instanceof Class) {
 								params[i] = (Class<?>) types[i];
-							}
-							else if (types[i] instanceof ParameterizedType)
-							{
-								params[i] = (Class<?>) ((ParameterizedType) types[i]).getRawType();
+							} else if (types[i] instanceof ParameterizedType) {
+								params[i] = (Class<?>) ((ParameterizedType) types[i])
+										.getRawType();
 							}
 						}
 
 						tempContainer = new ClassContainer(tempType, params);
 						fields.put(f.getName(), tempContainer);
-					}
-					else
-					{
+					} else {
 						tempContainer = new ClassContainer(tempType);
 						fields.put(f.getName(), tempContainer);
 					}
 				}
 
 				// check for UniqueKey
-				if (f.isAnnotationPresent(UniqueLoadingKey.class))
-				{
+				if (f.isAnnotationPresent(UniqueLoadingKey.class)) {
 					if (uniqueKey != null)
-						throw new RuntimeException("Each class may only have 1 UniqueLoadingKey");
-					if (!f.getType().isPrimitive() && !f.getType().equals(String.class))
-						throw new RuntimeException("The UniqueLoadingKey must be a primitive or a string");
+						throw new RuntimeException(
+								"Each class may only have 1 UniqueLoadingKey");
+					if (!f.getType().isPrimitive()
+							&& !f.getType().equals(String.class))
+						throw new RuntimeException(
+								"The UniqueLoadingKey must be a primitive or a string");
 
 					isUniqueKeyField = true;
 					uniqueKey = f.getName();
@@ -118,35 +107,41 @@ public class TypeInfoStandard implements ITypeInfo<Object>
 		} while ((currentType = currentType.getSuperclass()) != null);
 
 		// find reconstructor method
-		for (Method m : type.getDeclaredMethods())
-		{
+		for (Method m : type.getDeclaredMethods()) {
 			// catches the Reconsutructor
-			if (m.isAnnotationPresent(Reconstructor.class))
-			{
+			if (m.isAnnotationPresent(Reconstructor.class)) {
 				if (reconstructorMethod != null)
-					throw new RuntimeException("Each class may only have 1 reconstructor method");
+					throw new RuntimeException(
+							"Each class may only have 1 reconstructor method");
 				if (!Modifier.isStatic(m.getModifiers()))
-					throw new RuntimeException("The reconstructor method must be static!");
+					throw new RuntimeException(
+							"The reconstructor method must be static!");
 				if (!m.getReturnType().equals(type))
-					throw new RuntimeException("The reconstructor method must return " + type);
-				if (!Arrays.equals(m.getParameterTypes(), new Class[] { IReconstructData.class }))
-					throw new RuntimeException("The reconstructor method must have exactly 1 " + IReconstructData.class + "paremeter!");
+					throw new RuntimeException(
+							"The reconstructor method must return " + type);
+				if (!Arrays.equals(m.getParameterTypes(),
+						new Class[] { IReconstructData.class }))
+					throw new RuntimeException(
+							"The reconstructor method must have exactly 1 "
+									+ IReconstructData.class + "paremeter!");
 
 				reconstructorMethod = m.getName();
 			}
 			// catches the UniqueLoadingKey method variant
-			else if (m.isAnnotationPresent(UniqueLoadingKey.class))
-			{
+			else if (m.isAnnotationPresent(UniqueLoadingKey.class)) {
 				if (uniqueKey != null)
-					throw new RuntimeException("Each class may only have 1 UniqueLoadingKey");
+					throw new RuntimeException(
+							"Each class may only have 1 UniqueLoadingKey");
 
-				if (m.getParameterTypes().length > 0)
-				{
-					new RuntimeException("The reconstructor method must have no paremeters");
+				if (m.getParameterTypes().length > 0) {
+					new RuntimeException(
+							"The reconstructor method must have no paremeters");
 				}
 
-				if (!m.getReturnType().isPrimitive() && !m.getReturnType().equals(String.class))
-					throw new RuntimeException("The UniqueLoadingKey method must return a primitive or a string");
+				if (!m.getReturnType().isPrimitive()
+						&& !m.getReturnType().equals(String.class))
+					throw new RuntimeException(
+							"The UniqueLoadingKey method must return a primitive or a string");
 
 				uniqueKey = m.getName();
 				isUniqueKeyField = false;
@@ -155,8 +150,7 @@ public class TypeInfoStandard implements ITypeInfo<Object>
 	}
 
 	@Override
-	public ClassContainer getTypeOfField(String field)
-	{
+	public ClassContainer getTypeOfField(String field) {
 		if (field == null)
 			return null;
 
@@ -164,24 +158,20 @@ public class TypeInfoStandard implements ITypeInfo<Object>
 	}
 
 	@Override
-	public TypeData getTypeDataFromObject(Object objectSaved)
-	{
+	public TypeData getTypeDataFromObject(Object objectSaved) {
 		Class<?> c = objectSaved.getClass();
-		TypeData data = DataStorageManager.getDataForType(new ClassContainer(type));
+		TypeData data = DataStorageManager.getDataForType(new ClassContainer(
+				type));
 		Field f;
 		Object obj;
 
 		// do Unique key stuff
-		try
-		{
-			if (isUniqueKeyField)
-			{
+		try {
+			if (isUniqueKeyField) {
 				f = c.getDeclaredField(uniqueKey);
 				f.setAccessible(true);
 				data.setUniqueKey(f.get(objectSaved).toString());
-			}
-			else
-			{
+			} else {
 				Method m;
 				String methodName = uniqueKey.replace("()", "");
 				m = c.getDeclaredMethod(methodName, new Class[] {});
@@ -190,50 +180,54 @@ public class TypeInfoStandard implements ITypeInfo<Object>
 				data.setUniqueKey(val.toString());
 
 			}
-		}
-		catch (Exception e)
-		{
-			OutputHandler.felog.log(Level.SEVERE, "Reflection error trying to get UniqueLoadingKey from " + objectSaved.getClass() + ". FE will continue without saving this.", e);
+		} catch (Exception e) {
+			OutputHandler.felog.log(Level.SEVERE,
+					"Reflection error trying to get UniqueLoadingKey from "
+							+ objectSaved.getClass()
+							+ ". FE will continue without saving this.", e);
 		}
 
 		String[] keys = fields.keySet().toArray(new String[fields.size()]);
 		Class<?> currentClass = c;
 		// Iterate over the object grabbing the fields we want to examine.
-		for (int i = 0; i < keys.length; ++i)
-		{
-			try
-			{
+		for (int i = 0; i < keys.length; ++i) {
+			try {
 				f = currentClass.getDeclaredField(keys[i]);
 				f.setAccessible(true);
 				obj = f.get(objectSaved);
 
-				if (obj != null)
-				{
-					if (StorageManager.isTypeComplex(obj.getClass()))
-					{
-						// This object is not a primitive. Call this function on the appropriate TypeTagger.
-						obj = DataStorageManager.getDataForObject(fields.get(keys[i]), obj);
+				if (obj != null) {
+					if (StorageManager.isTypeComplex(obj.getClass())) {
+						// This object is not a primitive. Call this function on
+						// the appropriate TypeTagger.
+						obj = DataStorageManager.getDataForObject(
+								fields.get(keys[i]), obj);
 					}
 					data.putField(keys[i], obj);
 				}
-				// Ensure we reset the currentClass after trying this. It may have been altered by a previous attempt.
+				// Ensure we reset the currentClass after trying this. It may
+				// have been altered by a previous attempt.
 				currentClass = c;
-			}
-			catch (NoSuchFieldException e)
-			{
+			} catch (NoSuchFieldException e) {
 				// Try again with a parent class.
 				currentClass = currentClass.getSuperclass();
-				if (currentClass == null)
-				{
+				if (currentClass == null) {
 					// Unless this happens. (Note: This shouldn't happen.)
-					OutputHandler.felog.log(Level.SEVERE, "Reflection error trying to save " + objectSaved.getClass() + ". FE will continue without saving this.", e);
+					OutputHandler.felog
+							.log(Level.SEVERE,
+									"Reflection error trying to save "
+											+ objectSaved.getClass()
+											+ ". FE will continue without saving this.",
+									e);
 				}
 				--i;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				// This... Should not happen. Unless something stupid.
-				OutputHandler.felog.log(Level.SEVERE, "Reflection error trying to save " + objectSaved.getClass() + ". FE will continue without saving this.", e);
+				OutputHandler.felog.log(
+						Level.SEVERE,
+						"Reflection error trying to save "
+								+ objectSaved.getClass()
+								+ ". FE will continue without saving this.", e);
 			}
 		}
 
@@ -241,49 +235,44 @@ public class TypeInfoStandard implements ITypeInfo<Object>
 	}
 
 	@Override
-	public String[] getFieldList()
-	{
+	public String[] getFieldList() {
 		return fields.keySet().toArray(new String[fields.size()]);
 	}
 
 	@Override
-	public Object reconstruct(IReconstructData data)
-	{
-		try
-		{
-			Method reconstructor = type.getDeclaredMethod(reconstructorMethod, IReconstructData.class);
+	public Object reconstruct(IReconstructData data) {
+		try {
+			Method reconstructor = type.getDeclaredMethod(reconstructorMethod,
+					IReconstructData.class);
 			reconstructor.setAccessible(true);
 			return reconstructor.invoke(null, data);
-		}
-		catch (Throwable thrown)
-		{
-			OutputHandler.felog.log(Level.SEVERE, "Error loading " + data.getType() + " with name " + data.getUniqueKey(), thrown);
+		} catch (Throwable thrown) {
+			OutputHandler.felog.log(
+					Level.SEVERE,
+					"Error loading " + data.getType() + " with name "
+							+ data.getUniqueKey(), thrown);
 		}
 
 		return null;
 	}
 
 	@Override
-	public boolean canSaveInline()
-	{
+	public boolean canSaveInline() {
 		return inLine;
 	}
 
 	@Override
-	public ClassContainer getType()
-	{
+	public ClassContainer getType() {
 		return new ClassContainer(type);
 	}
 
 	@Override
-	public Class<?>[] getGenericTypes()
-	{
+	public Class<?>[] getGenericTypes() {
 		return null;
 	}
 
 	@Override
-	public ITypeInfo<?> getInfoForField(String field)
-	{
+	public ITypeInfo<?> getInfoForField(String field) {
 		return DataStorageManager.getInfoForType(getTypeOfField(field));
 	}
 

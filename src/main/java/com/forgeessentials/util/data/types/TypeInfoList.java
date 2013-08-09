@@ -14,33 +14,28 @@ import com.forgeessentials.util.data.api.IReconstructData;
 import com.forgeessentials.util.data.api.TypeData;
 import com.forgeessentials.util.data.api.TypeMultiValInfo;
 
-public class TypeInfoList extends TypeMultiValInfo
-{
-	public static final String	POS		= "ElementPos";
-	public static final String	ELEMENT	= "Element";
+public class TypeInfoList extends TypeMultiValInfo {
+	public static final String POS = "ElementPos";
+	public static final String ELEMENT = "Element";
 
-	public TypeInfoList(ClassContainer container)
-	{
+	public TypeInfoList(ClassContainer container) {
 		super(container);
 	}
 
 	@Override
-	public void buildEntry(HashMap<String, ClassContainer> fields)
-	{
+	public void buildEntry(HashMap<String, ClassContainer> fields) {
 		fields.put(POS, new ClassContainer(int.class));
 		fields.put(ELEMENT, new ClassContainer(container.getParameters()[0]));
 	}
 
 	@Override
-	public Set<TypeData> getTypeDatasFromObject(Object obj)
-	{
+	public Set<TypeData> getTypeDatasFromObject(Object obj) {
 		HashSet<TypeData> datas = new HashSet<TypeData>();
 
 		List<?> list = (List<?>) obj;
 
 		TypeData data;
-		for (int i = 0; i < list.size(); i++)
-		{
+		for (int i = 0; i < list.size(); i++) {
 			data = getEntryData();
 			data.putField(POS, i);
 			data.putField(ELEMENT, list.get(i));
@@ -51,28 +46,24 @@ public class TypeInfoList extends TypeMultiValInfo
 	}
 
 	@Override
-	public Object reconstruct(TypeData[] data, IReconstructData rawType)
-	{
+	public Object reconstruct(TypeData[] data, IReconstructData rawType) {
 		Object array = Array.newInstance(container.getType(), data.length);
 
-		for (TypeData dat : data)
-		{
-			Array.set(array, (Integer) dat.getFieldValue(POS), dat.getFieldValue(ELEMENT));
+		for (TypeData dat : data) {
+			Array.set(array, (Integer) dat.getFieldValue(POS),
+					dat.getFieldValue(ELEMENT));
 		}
 
 		List<Object> list = new ArrayList<Object>(data.length);
-		try
-		{
+		try {
 			list = (List<Object>) container.getType().newInstance();
-		}
-		catch (Exception e)
-		{
-			OutputHandler.felog.log(Level.SEVERE, "Error instantiating " + container.getType().getCanonicalName() + "!", e);
+		} catch (Exception e) {
+			OutputHandler.felog.log(Level.SEVERE, "Error instantiating "
+					+ container.getType().getCanonicalName() + "!", e);
 			return null;
 		}
 
-		for (int i = 0; i < data.length; i++)
-		{
+		for (int i = 0; i < data.length; i++) {
 			list.add(Array.get(array, i));
 		}
 

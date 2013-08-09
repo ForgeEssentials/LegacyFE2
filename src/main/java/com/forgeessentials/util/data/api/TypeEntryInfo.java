@@ -3,78 +3,67 @@ package com.forgeessentials.util.data.api;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TypeEntryInfo implements ITypeInfo
-{
-	private ClassContainer					parent;
-	private HashMap<String, ClassContainer>	types;
+public class TypeEntryInfo implements ITypeInfo {
+	private ClassContainer parent;
+	private HashMap<String, ClassContainer> types;
 
-	public TypeEntryInfo(HashMap<String, ClassContainer> types, ClassContainer parent)
-	{
+	public TypeEntryInfo(HashMap<String, ClassContainer> types,
+			ClassContainer parent) {
 		this.parent = parent;
 		this.types = types;
 	}
 
 	@Override
-	public boolean canSaveInline()
-	{
+	public boolean canSaveInline() {
 		return true;
 	}
 
 	@Override
-	public void build()
-	{
+	public void build() {
 		// unnecessary
 	}
 
 	@Override
-	public ClassContainer getTypeOfField(String field)
-	{
+	public ClassContainer getTypeOfField(String field) {
 		return types.get(field);
 	}
 
 	@Override
-	public String[] getFieldList()
-	{
+	public String[] getFieldList() {
 		return types.keySet().toArray(new String[types.size()]);
 	}
 
 	@Override
-	public TypeData getTypeDataFromObject(Object obj)
-	{
+	public TypeData getTypeDataFromObject(Object obj) {
 		// no.. just no.
 		// this will be handled internally by each MutiVal object
 		return null;
 	}
 
 	@Override
-	public Object reconstruct(IReconstructData data)
-	{
+	public Object reconstruct(IReconstructData data) {
 		// do nothing.. this is a dummy class
 		return data;
 	}
 
 	@Override
-	public ClassContainer getType()
-	{
+	public ClassContainer getType() {
 		// why not? :) better than void.class .
 		return new ClassContainer(Map.Entry.class);
 	}
 
-	public ClassContainer getParentType()
-	{
+	public ClassContainer getParentType() {
 		return parent;
 	}
 
 	@Override
-	public Class[] getGenericTypes()
-	{
+	public Class[] getGenericTypes() {
 		// prolly never will be used.
 		return types.values().toArray(new Class[types.size()]);
 	}
 
 	@Override
-	public ITypeInfo getInfoForField(String field)
-	{
+	public ITypeInfo getInfoForField(String field) {
 		return DataStorageManager.getInfoForType(getTypeOfField(field));
 	}
 
