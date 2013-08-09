@@ -17,6 +17,24 @@ manifest {
         attributes("FMLCorePlugin": "com.forgeessentials.core.bootstrap.FELoadingPlugin")
     }}
 
+repositories {
+    maven {
+        url "https://github.com/ForgeEssentials/FEInstaller/raw/master/repo/libs/"
+    }
+    maven {
+        url "http://maven.sk89q.com/repo/"
+    }
+mavenCentral()
+
+}
+
+dependencies {
+    compile 'org.pircbotx:pircbotx:1.9'
+    compile 'mysql:mysql-connector-java:5.1.25'
+    compile 'com.sk89q:worldedit:5.5.6'
+    compile 'org.mcstats:PluginMetrics:r7-femod'
+}
+
 task sourceJar(type: Jar) {
 	from sourceSets.main.allSource
 	appendix = 'src'
