@@ -13,8 +13,6 @@ public class CoreModule {
 
 	public static String modlistLocation;
 
-	private MajoritySleepHandler sleep;
-
 	@FEModuleEventHandler
 	public void load(FMLInitializationEvent e) {
 		GameRegistry.registerPlayerTracker(new MOTDHandler());

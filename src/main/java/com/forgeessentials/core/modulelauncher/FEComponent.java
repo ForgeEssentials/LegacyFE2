@@ -75,7 +75,7 @@ public @interface FEComponent {
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.TYPE })
+	@Target({ ElementType.FIELD })
 	public @interface ModuleDir {
 	}
 

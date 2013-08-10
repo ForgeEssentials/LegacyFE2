@@ -1,11 +1,8 @@
 Done:
-Some parts of core
-Some parts of util
+Core/Util: 35%
 Data API
-Some parts of open API
+API: 15%
+Permissions: 70%
 
 Not yet done:
-The rest of core, util
-Permissions
 Modules
-The rest of open API

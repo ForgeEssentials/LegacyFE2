@@ -42,7 +42,7 @@ public class ForgeEssentials extends DummyModContainer {
 
 	public ForgeEssentials() {
 		super(new ModMetadata());
-		/* ModMetadata is the same as mcmod.info */
+		/* Might want to replace this with the mcmod.info stuff - only name, modid and version are required */
 		ModMetadata myMeta = super.getMetadata();
 		myMeta.authorList = Arrays.asList(new String[] { "AbrarSyed",
 				"Dries007", "luacs1998" });
