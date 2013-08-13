@@ -1,8 +1,90 @@
 Done:
-Core/Util: 35%
-Data API
-API: 15%
+Core/Util: 37%
+
+ModuleLauncher: Done
+Commands: Not done
+Utils: Not done, will port as needed
+Data API: Done
+Misc features: Partially done (only remaining with mod/MCStats integration, that's going into a Compat module)
+
+API: 15% (Will port/write as needed)
+
 Permissions: 70%
 
-Not yet done:
-Modules
+Only remaining with perm commands and auto promotion
+
+Not yet started:
+
+Afterlife:
+
+Graves
+Respawn debuffs
+
+Auth:
+
+Alternative auth server, only usable when mojang.com is down (we do not support piracy)
+
+Request: Allow servers to require secondary verification
+
+Backups:
+
+On demand or as needed backups (preferably incremental)
+
+Chat:
+
+Formats chat, adds player prefixes and suffixes, somewhat full featured IRC integration
+
+Commands:
+
+https://github.com/ForgeEssentials/ForgeEssentialsMain/wiki/Commands
+
+Economy:
+
+Allow each player to have an amount of non-item funds
+Request: Allow players to convert money to item form
+
+Player Logger:
+
+Logs everything players do on the server
+
+Protection
+
+Provide WorldGuard style protections for individual areas
+
+Questioner:
+
+Simple yes/no system (we can do without this)
+
+Scripting
+
+Allow command scripts to be created and run on trigger by certain events
+Request: Adopt CommandHelper and MScript as an alternative/in addition to the normal scripting system
+
+Server Vote:
+
+Provide Votifier support for FE powered servers
+
+Snooper:
+
+Allow outside events to affect players within the server
+
+Tickets:
+
+A simple issue-based system for server members to contact their admins
+
+WorldBorder:
+
+Prevent players going beyond a certain point, also allow for pre generation of worlds.
+
+WorldControl:
+
+To be replaced by WorldEdit compatibility (pending WE 6.0)
+
+Misc:
+
+PluginMetrics integration, allow permissions to affect Rei's Minimap.
+
+Client:
+
+WECUI style selections, as well as GUI system for controlling the server
+Request: Implement WorldEditCUI's API to allow for interop with worldedit.
