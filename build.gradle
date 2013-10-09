@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+		classpath 'com.github.abrarsyed.gmcp:GMCP:0.8'
+    }
+}
+
+apply plugin: "gmcp_mcsolo"
+
+import com.github.abrarsyed.gmcp.tasks.obfuscate.ReobfTask;
+
+minecraft {
+	minecraftVersion = "1.6.4"
+	forgeVersion = '916'
+}
+
+// for the default internal minecraft jar
+jar {
+	baseName = 'minecraft'
+	version = minecraft.minecraftVersion
+}
+
+allprojects
+{
+	sourceCompatibility = '1.7'
+	targetCompatibility = '1.6'
+}
+
+subprojects
+{
+	apply plugin: 'java'
+	
+    repositories
+	{
+        maven
+		{
+			name 'forge'
+			url 'http://files.minecraftforge.net/maven'
+        }
+        maven
+		{
+			name "minecraft"
+			url "http://s3.amazonaws.com/Minecraft.Download/libraries"
+        }
+        
+		mavenCentral()
+	}
+	
+	jar {
+		destinationDir = rootProject.jar.destinationDir
+		
+		// TODO: setup META-INF generation
+	}
+	
+    dependencies {
+		compile rootProject
+		//compile project(':Core')
+		
+		testCompile 'junit:junit:4.11'
+	}
+}
+
+// make them all depend on the core
+configure(subprojects.findAll {it.name != 'Core'}) {
+    dependencies {
+		compile project.project(':Core')
+	}
+}
+
+// to reobfuscate the tasks properly
+task 'reobf'(type: ReobfTask, dependsOn: 'genReobfSrgs') {
+	subprojects.each { proj ->
+		reobf(proj.tasks.jar) { spec ->
+			spec.classpath = proj.sourceSets.main.compileClasspath
+		}
+	}
+}
