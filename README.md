@@ -8,5 +8,5 @@ Recoding is a slow process and will take time. We request for your cooperation i
 
 If you wish to compile/work on FE yourself you may fork this repo and run 'gradlew build' in the folder you forked this repo to.
 
-#### there is a good reason for issues on this project bieng disabled. Please use JIRA
+#### there is a good reason for issues on this project being disabled. Please use JIRA
 #### http://jira.forgeessentials.com/browse/FE
