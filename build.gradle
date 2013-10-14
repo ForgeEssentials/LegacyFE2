@@ -9,7 +9,14 @@ buildscript {
 
 apply plugin: "gmcp_mcsolo"
 
+// do imports
 import com.github.abrarsyed.gmcp.tasks.obfuscate.ReobfTask;
+import com.github.abrarsyed.gmcp.Util
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
 
 // bamboo vars
 if (!hasProperty('branch'))
@@ -45,14 +52,17 @@ allprojects
 {
 	sourceCompatibility = '1.7'
 	targetCompatibility = '1.6'
+	archivePath = Util.baseFile("minecraft-recompiled-${project.minecraft.minecraftVersion}.jar")
 }
 
 subprojects
 {
 	apply plugin: 'java'
 	
-	// tack on the BuildNumber
-	version += '.'+buildnumber
+	afterEvaluate {
+		// tack on the BuildNumber
+		version += '.'+buildnumber
+	}
 	
     repositories
 	{
@@ -71,7 +81,7 @@ subprojects
 	}
 	
 	jar {
-		destinationDir = rootProject.jar.destinationDir
+		destinationDir = new File(rootProject.getBuildDir(), 'libs')
 		
 		// manifest generation
 		manifest {
@@ -142,13 +152,6 @@ task 'reobf'(type: ReobfTask, dependsOn: 'genReobfSrgs') {
 // ----------------------------
 // JSON TASK!
 // ----------------------------
-
-import com.github.abrarsyed.gmcp.Util
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
 
 public class JsonTask extends DefaultTask
 {
