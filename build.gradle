@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-		classpath 'com.github.abrarsyed.gmcp:GMCP:0.8'
+		classpath 'com.github.abrarsyed.gmcp:GMCP:latest.integration'  // gets the VERY LATEST GMCP of all time :)
     }
 }
 
@@ -11,9 +11,28 @@ apply plugin: "gmcp_mcsolo"
 
 import com.github.abrarsyed.gmcp.tasks.obfuscate.ReobfTask;
 
+// bamboo vars
+if (!hasProperty('branch'))
+{
+	ext.branch = 'master'
+	logger.lifecycle "SETTING BRANCH TO MASTER"
+}
+if (!hasProperty('buildnumber'))
+{
+	ext.buildnumber = 0
+	logger.lifecycle "SETTING BUILDNUMBER TO 0"
+}
+
+// define extra stuff.
+ext.asm = []
+ext.ats = []
+ext.moduleDeps = []
+ext.deps = []
+ext.defaultClient = false
+ext.defaultServer = true
+
 minecraft {
 	minecraftVersion = "1.6.4"
-	forgeVersion = '916'
 }
 
 // for the default internal minecraft jar
@@ -31,6 +50,9 @@ allprojects
 subprojects
 {
 	apply plugin: 'java'
+	
+	// tack on the BuildNumber
+	version += '.'+buildnumber
 	
     repositories
 	{
@@ -51,15 +73,52 @@ subprojects
 	jar {
 		destinationDir = rootProject.jar.destinationDir
 		
-		// TODO: setup META-INF generation
+		// manifest generation
+		manifest {
+			
+			// TODO: Dries fix these!!!  no periods allowed in manifest keys!
+			// Maybe uise manifest sections or something.. and read up on the manifest spec.
+		
+			// versions
+			attributes version: project.version, mcversion: rootProject.minecraft.minecraftVersion
+			// asm stuff and ATs
+			attributes "FECoreASM": asm.join(' '), "FECoreAT": ats.join(' ')
+			// libds and deps
+			attributes "FECoreLibsMaven": deps.join(' ')
+		}
 	}
 	
     dependencies {
 		compile rootProject
-		//compile project(':Core')
+		
+		// you add it to the list, il add it here
+		deps.each { dep ->
+			compile dep
+		}
+		
+		// same for module deps
+		moduleDeps.each { dep ->
+			compile project(":$dep")
+		}
 		
 		testCompile 'junit:junit:4.11'
 	}
+	
+	// custom json task
+	task('genJson', type: JsonTask) {
+		moduleDeps = moduleDeps
+		version = project.version
+		mcVersion = rootProject.minecraft.minecraftVersion
+		jarFile = { project.tasks.jar.archivePath }
+		defaultClient = project.defaultClient
+		defaultServer = project.defaultServer
+		
+		// HELP?
+		branch = project.branch
+	}
+	
+	// task dependency :)
+	rootProject.tasks.build.dependsOn project.tasks.genJson
 }
 
 // make them all depend on the core
@@ -75,5 +134,85 @@ task 'reobf'(type: ReobfTask, dependsOn: 'genReobfSrgs') {
 		reobf(proj.tasks.jar) { spec ->
 			spec.classpath = proj.sourceSets.main.compileClasspath
 		}
+		// needs to be done later... like here
+		proj.tasks.genJson.dependsOn rootProject.tasks.reobf
+	}
+}
+
+// ----------------------------
+// JSON TASK!
+// ----------------------------
+
+import com.github.abrarsyed.gmcp.Util
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
+
+public class JsonTask extends DefaultTask
+{
+    @Input
+    def moduleDeps = []
+
+    @Input
+    def version = ""
+
+    @Input
+    def mcVersion
+
+    @Input
+    def branch
+
+    @Input
+    def baseUrl = "dl.forgeessentials.com/modules/"
+	
+	@Input
+    def defaultClient = false
+
+    @Input
+    def defaultServer = true
+
+    @InputFile
+    def jarFile
+
+    @OutputFile
+    def output =  { getJarFile().getPath().replace("jar", "json") }
+
+    @TaskAction
+    def doTask()
+    {
+        jarFile = project.file(jarFile)
+	    
+        def builder = new groovy.json.JsonBuilder()
+
+        builder.invokeMethod(project.name, [{
+            invokeMethod("default") {
+                client defaultClient
+                server defaultServer
+            }
+            invokeMethod(mcVersion) {
+                invokeMethod(branch) {
+                    files {
+                        filename jarFile.getName()
+                        url baseUrl + jarFile.getName()
+                        hash Util.hash(jarFile)
+                    }
+                    dependencies moduleDeps
+                }
+            }
+        }])
+
+        project.file(output).write builder.toPrettyString()
+    }
+	
+	File getJarFile()
+	{
+		return project.file(jarFile)
+	}
+	
+		File getOutput()
+	{
+		return project.file(output)
 	}
 }
