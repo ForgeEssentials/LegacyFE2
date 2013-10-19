@@ -1,0 +1,16 @@
+[
+{
+  "modid": "FE",
+  "name": "ForgeEssentials",
+  "description": "Permissions and more for Forge!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://forgeessentials.com/",
+  "updateUrl": "http://forgeessentials.com/",
+  "authors": ["AbrarSyed", "Dries007", "Luacs1998", "Many others"],
+  "credits": "All the FE team members.",
+  "logoFile": "FElogo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
