@@ -3,7 +3,6 @@ package com.forgeessentials.core;
 import com.forgeessentials.core.modules.ModuleLoader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
-import net.minecraftforge.common.Configuration;
 
 import java.io.File;
 
@@ -15,7 +14,7 @@ public class ForgeEssentialsMod
     {
         ForgeEssentials.preInit(event);
 
-        CoreConfig.INSTANCE.init(new File(ForgeEssentials.settingsFolder, "ForgeEssentialsCore.cfg"));
+        CoreConfig.INSTANCE.init(new File(ForgeEssentials.SETTINGS_DIR, "ForgeEssentialsCore.cfg"));
 
         ModuleLoader.init(event);
     }

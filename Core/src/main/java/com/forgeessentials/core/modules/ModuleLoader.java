@@ -65,7 +65,7 @@ public class ModuleLoader
     {
         for (String module : LOADED_MODULES)
         {
-            Configuration configuration = CoreConfig.INSTANCE.useOneConfig ? CoreConfig.INSTANCE.getConfiguration() : new Configuration(new File(ForgeEssentials.settingsFolder, module + ".cfg"));
+            Configuration configuration = CoreConfig.INSTANCE.useOneConfig ? CoreConfig.INSTANCE.getConfiguration() : new Configuration(new File(ForgeEssentials.SETTINGS_DIR, module + ".cfg"));
             MODULES_MAP.get(module).module.doConfig(configuration);
             configuration.save();
         }
