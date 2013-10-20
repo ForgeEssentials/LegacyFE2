@@ -1,5 +1,8 @@
 package com.forgeessentials.core.modules;
 
+import cpw.mods.fml.common.event.FMLEvent;
+import net.minecraftforge.common.Configuration;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,7 +18,7 @@ public interface IFEModule
     /**
      * A marker annotation that marks the class to be loaded my the FE Module Loader.
      * This annotation contains some properties that every module should have hardcoded.
-     * other module properties are instead implemented as getters in the IModul;e interface.
+     * other module properties are instead implemented as getters in the IModule interface.
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
@@ -45,4 +48,17 @@ public interface IFEModule
      * It is reccomended that the
      */
     public abstract String getVersion();
+
+    /**
+     * Use this method to get all FML state events.
+     * @param event Can be any of the FML events.
+     */
+    public void fmlEvent(FMLEvent event);
+
+    /**
+     * Do your configuration here.
+     * Use your ID as a root category.
+     * @param configuration The config you should use.
+     */
+    public void doConfig(Configuration configuration);
 }

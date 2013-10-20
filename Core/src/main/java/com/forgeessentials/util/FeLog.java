@@ -43,4 +43,9 @@ public class FeLog
     {
         INSTANCE.logger.severe(o.toString());
     }
+
+    public static void warning(Object o)
+    {
+        INSTANCE.logger.warning(o.toString());
+    }
 }

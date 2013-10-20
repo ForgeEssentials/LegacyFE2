@@ -14,7 +14,7 @@ public class ModuleContainer
     public final IFEModule.LoadMe           annotation;
     public final boolean                    loadOnClient;
     public final boolean                    loadOnServer;
-    public final boolean                    load;
+    public final boolean                    loaded;
 
     public ModuleState state = ModuleState.UNLOADED;
 
@@ -27,19 +27,22 @@ public class ModuleContainer
             // the classCast exception is caught later
             clazz = (Class<? extends IFEModule>) Class.forName(asmData.getClassName());
 
-            for (Annotation a : clazz.getAnnotations())
-            {
-                FeLog.info(a);
-            }
-
             annotation = clazz.getAnnotation(IFEModule.LoadMe.class);
             name = annotation.name();
             loadOnClient = annotation.loadOnClient();
             loadOnServer = annotation.loadOnServer();
 
-            load = (FMLCommonHandler.instance().getSide().isClient() && loadOnClient) || (FMLCommonHandler.instance().getSide().isServer() && loadOnServer);
+            loaded = (FMLCommonHandler.instance().getSide().isClient() && loadOnClient) || (FMLCommonHandler.instance().getSide().isServer() && loadOnServer);
 
-            module = load ? (IFEModule) clazz.newInstance() : null;
+            if (loaded)
+            {
+                module = (IFEModule) clazz.newInstance();
+                state = ModuleState.LOADED;
+            }
+            else
+            {
+                module = null;
+            }
         }
         // all the catch statements
         catch (ClassNotFoundException e)
