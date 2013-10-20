@@ -13,11 +13,7 @@ public class ForgeEssentialsMod
     @Mod.EventHandler
     public void handleFMLEvent(FMLPreInitializationEvent event)
     {
-        ForgeEssentials.feFolder = new File(event.getModConfigurationDirectory().getParentFile(), ForgeEssentials.NAME);
-        ForgeEssentials.feFolder.mkdirs();
-
-        ForgeEssentials.settingsFolder = new File(ForgeEssentials.feFolder, "settings");
-        ForgeEssentials.settingsFolder.mkdir();
+        ForgeEssentials.preInit(event);
 
         CoreConfig.INSTANCE.init(new File(ForgeEssentials.settingsFolder, "ForgeEssentialsCore.cfg"));
 

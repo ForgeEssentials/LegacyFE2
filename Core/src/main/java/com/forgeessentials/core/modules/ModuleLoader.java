@@ -2,7 +2,6 @@ package com.forgeessentials.core.modules;
 
 import com.forgeessentials.core.CoreConfig;
 import com.forgeessentials.core.ForgeEssentials;
-import com.forgeessentials.util.FeLog;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -13,6 +12,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static com.forgeessentials.core.ForgeEssentials.LOGGER;
+
 public class ModuleLoader
 {
     private static final HashSet<String>                  LOADED_MODULES = new HashSet<String>();
@@ -20,11 +21,12 @@ public class ModuleLoader
 
     /**
      * Gets called to load modules and do config and pass on the FMLPreInitializationEvent.
+     *
      * @param event used for its ASM data
      */
     public static void init(FMLPreInitializationEvent event)
     {
-        FeLog.info("Discovering all modules...");
+        LOGGER.info("Discovering all modules...");
         String description = event.getModMetadata().description;
         description += "\n" + EnumChatFormatting.UNDERLINE + "Modules:" + EnumChatFormatting.RESET + "\n";
 
@@ -34,14 +36,20 @@ public class ModuleLoader
             {
                 ModuleContainer container = new ModuleContainer(data);
                 description += "\n" + (container.loaded ? EnumChatFormatting.DARK_GREEN : EnumChatFormatting.DARK_RED) + container.name + EnumChatFormatting.RESET;
-                if (container.loaded) LOADED_MODULES.add(container.name);
-                else FeLog.warning("Not loading " + container.name);
+                if (container.loaded)
+                {
+                    LOADED_MODULES.add(container.name);
+                }
+                else
+                {
+                    LOGGER.warn("Not loading {}", container.name);
+                }
 
                 MODULES_MAP.put(container.name, container);
             }
             catch (Exception e)
             {
-                FeLog.severe("An error occurred while trying to load a module from class " + data.getClassName());
+                LOGGER.error("An error occurred while trying to load a module from class {}", data.getClassName());
                 e.printStackTrace();
             }
         }
@@ -81,6 +89,7 @@ public class ModuleLoader
     /**
      * Pass an FML event to all loaded modules.
      * Don't pass FMLPreInitializationEvent, that has been done internally.
+     *
      * @param event FMLEvent to be passed on.
      */
     public static void passEvent(FMLEvent event)

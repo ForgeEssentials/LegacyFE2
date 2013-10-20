@@ -1,7 +1,8 @@
 package com.forgeessentials.dummy;
 
+import static com.forgeessentials.core.ForgeEssentials.LOGGER;
+
 import com.forgeessentials.core.modules.IFEModule;
-import com.forgeessentials.util.FeLog;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLEvent;
 import net.minecraftforge.common.Configuration;
@@ -19,7 +20,7 @@ public class Dummy implements IFEModule
     @Override
     public void fmlEvent(FMLEvent event)
     {
-        FeLog.severe("Event: " + event.getEventType() + " Side: " + FMLCommonHandler.instance().getSide() + " Effective Side: " + FMLCommonHandler.instance().getEffectiveSide());
+        LOGGER.warn("Event: {}  Side: {}  EffectiveSide: {}", event.getEventType(), FMLCommonHandler.instance().getSide(), FMLCommonHandler.instance().getEffectiveSide());
     }
 
     @Override

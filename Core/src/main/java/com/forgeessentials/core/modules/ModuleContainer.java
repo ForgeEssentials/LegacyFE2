@@ -1,10 +1,12 @@
 package com.forgeessentials.core.modules;
 
-import com.forgeessentials.util.FeLog;
+import com.forgeessentials.core.ForgeEssentials;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 
 import java.lang.annotation.Annotation;
+
+import static com.forgeessentials.core.ForgeEssentials.LOGGER;
 
 public class ModuleContainer
 {
@@ -22,7 +24,7 @@ public class ModuleContainer
     {
         try
         {
-            FeLog.info("Module class:  " + asmData.getClassName());
+            LOGGER.info("Module class:  " + asmData.getClassName());
 
             // the classCast exception is caught later
             clazz = (Class<? extends IFEModule>) Class.forName(asmData.getClassName());

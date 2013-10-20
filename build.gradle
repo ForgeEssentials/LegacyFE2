@@ -48,6 +48,16 @@ jar {
 	version = minecraft.minecraftVersion
 }
 
+dependencies {
+
+    // logging
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'org.slf4j:slf4j-jdk14:1.7.5'
+
+    // testing
+    testCompile 'junit:junit:4.11'
+}
+
 allprojects
 {
 	sourceCompatibility = '1.7'
