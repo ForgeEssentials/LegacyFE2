@@ -1,8 +1,8 @@
 package com.forgeessentials.util;
 
+import com.forgeessentials.core.ForgeEssentials;
 import cpw.mods.fml.common.FMLLog;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FeLog
@@ -12,11 +12,19 @@ public class FeLog
 
     private FeLog()
     {
-        logger = Logger.getLogger(Data.MODID);
+        logger = Logger.getLogger(ForgeEssentials.MODID);
         logger.setParent(FMLLog.getLogger());
     }
 
-    public static FeLog get()
+    public static FeLog instance()
+    {
+        return INSTANCE;
+    }
+
+    /**
+     * @return The underlying Logger instance
+     */
+    public static FeLog getLogger()
     {
         return INSTANCE;
     }
@@ -28,7 +36,7 @@ public class FeLog
 
     public static void fine(Object o)
     {
-        INSTANCE.logger.info(o.toString());
+        INSTANCE.logger.fine(o.toString());
     }
 
     public static void severe(Object o)

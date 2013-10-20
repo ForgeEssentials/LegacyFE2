@@ -1,28 +1,23 @@
 package com.forgeessentials.core;
 
-import com.forgeessentials.core.modules.ModuleCenter;
-import com.forgeessentials.util.Data;
-import com.forgeessentials.util.FeLog;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.common.Configuration;
 
 import java.io.File;
 
-@Mod(modid = Data.MODID, name = Data.NAME)
 public class ForgeEssentials
 {
-    private Configuration configuration;
+    public static final String MODID = "FE";
+    public static final String NAME  = "ForgeEssentials";
+    public static File feFolder;
+    public static File settingsFolder;
 
-    @Mod.EventHandler
-    public void handleFMLEvent(FMLPreInitializationEvent event)
+    static void init(FMLPreInitializationEvent event)
     {
-        Data.init(event);
+        feFolder = new File(event.getModConfigurationDirectory().getParentFile(), NAME);
+        feFolder.mkdirs();
 
-        configuration = new Configuration(new File(Data.settingsFolder, "Core.cfg"));
-        configuration.save();
-
-        ModuleCenter.init(event);
+        settingsFolder = new File(feFolder, "settings");
+        settingsFolder.mkdir();
     }
 }

@@ -8,10 +8,10 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class ModuleCenter
+public class ModuleLoader
 {
-    private static final HashSet<String>                  LOADEDMODULES = new HashSet<String>();
-    private static final HashMap<String, ModuleContainer> MODULESMAP    = new HashMap<String, ModuleContainer>();
+    private static final HashSet<String>                  LOADED_MODULES = new HashSet<String>();
+    private static final HashMap<String, ModuleContainer> MODULES_MAP    = new HashMap<String, ModuleContainer>();
 
     public static void init(FMLPreInitializationEvent event)
     {
@@ -19,16 +19,16 @@ public class ModuleCenter
         String description = event.getModMetadata().description;
         description += "\n" + EnumChatFormatting.UNDERLINE + "Modules:" + EnumChatFormatting.RESET + "\n";
 
-        for (ASMDataTable.ASMData data : event.getAsmData().getAll(IModule.LoadMe.class.getName()))
+        for (ASMDataTable.ASMData data : event.getAsmData().getAll(IFEModule.LoadMe.class.getName()))
         {
             try
             {
                 ModuleContainer container = new ModuleContainer(data);
                 description += "\n" + (container.load ? EnumChatFormatting.DARK_GREEN : EnumChatFormatting.DARK_RED) + container.name + EnumChatFormatting.RESET;
-                if (container.load) LOADEDMODULES.add(container.name);
+                if (container.load) LOADED_MODULES.add(container.name);
                 else FeLog.fine("Not loading " + container.name);
 
-                MODULESMAP.put(container.name, container);
+                MODULES_MAP.put(container.name, container);
             }
             catch (Exception e)
             {
@@ -42,16 +42,16 @@ public class ModuleCenter
 
     public static ModuleContainer getModule(String name)
     {
-        return MODULESMAP.get(name);
+        return MODULES_MAP.get(name);
     }
 
     public static boolean isModulePresent(String name)
     {
-        return MODULESMAP.containsKey(name);
+        return MODULES_MAP.containsKey(name);
     }
 
     public static boolean isModuleLoaded(String name)
     {
-        return LOADEDMODULES.contains(name);
+        return LOADED_MODULES.contains(name);
     }
 }
