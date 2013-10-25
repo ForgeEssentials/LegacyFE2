@@ -1,5 +1,6 @@
 package com.forgeessentials.core;
 
+import com.forgeessentials.core.modules.FMLevents.FMLEventHandler;
 import com.forgeessentials.core.modules.ModuleLoader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
@@ -22,54 +23,48 @@ public class ForgeEssentialsMod
     @Mod.EventHandler
     public void handleFMLEvent(FMLInitializationEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLPostInitializationEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerAboutToStartEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerStartingEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerStartedEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerStoppingEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerStoppedEvent event)
     {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     @Mod.EventHandler
     public void handleFMLEvent(FMLInterModComms.IMCEvent event)
     {
-        ModuleLoader.passEvent(event);
-    }
-
-    @Mod.EventHandler
-    public void handleFMLEvent(FMLFingerprintViolationEvent event)
-    {
-        ModuleLoader.passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 }

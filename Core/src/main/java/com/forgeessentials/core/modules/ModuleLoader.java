@@ -2,6 +2,8 @@ package com.forgeessentials.core.modules;
 
 import com.forgeessentials.core.CoreConfig;
 import com.forgeessentials.core.ForgeEssentials;
+import com.forgeessentials.core.modules.FMLevents.FMLEventHandler;
+import com.forgeessentials.core.modules.FMLevents.IPreInit;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -16,8 +18,8 @@ import static com.forgeessentials.core.ForgeEssentials.LOGGER;
 
 public class ModuleLoader
 {
-    private static final HashSet<String>                  LOADED_MODULES = new HashSet<String>();
-    private static final HashMap<String, ModuleContainer> MODULES_MAP    = new HashMap<String, ModuleContainer>();
+    private static final HashMap<String, ModuleContainer> MODULES_MAP               = new HashMap<String, ModuleContainer>();
+    private static final HashSet<String>                  LOADED_MODULES            = new HashSet<String>();
 
     /**
      * Gets called to load modules and do config and pass on the FMLPreInitializationEvent.
@@ -39,6 +41,7 @@ public class ModuleLoader
                 if (container.loaded)
                 {
                     LOADED_MODULES.add(container.name);
+                    FMLEventHandler.checkInterfaces(container.module);
                 }
                 else
                 {
@@ -58,7 +61,7 @@ public class ModuleLoader
 
         doConfig();
 
-        passEvent(event);
+        FMLEventHandler.passEvent(event);
     }
 
     private static void doConfig()
@@ -84,19 +87,5 @@ public class ModuleLoader
     public static boolean isModuleLoaded(String name)
     {
         return LOADED_MODULES.contains(name);
-    }
-
-    /**
-     * Pass an FML event to all loaded modules.
-     * Don't pass FMLPreInitializationEvent, that has been done internally.
-     *
-     * @param event FMLEvent to be passed on.
-     */
-    public static void passEvent(FMLEvent event)
-    {
-        for (String module : LOADED_MODULES)
-        {
-            MODULES_MAP.get(module).module.fmlEvent(event);
-        }
     }
 }

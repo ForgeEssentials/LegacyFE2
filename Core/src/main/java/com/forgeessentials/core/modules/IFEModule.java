@@ -50,12 +50,6 @@ public interface IFEModule
     public abstract String getVersion();
 
     /**
-     * Use this method to get all FML state events.
-     * @param event Can be any of the FML events.
-     */
-    public void fmlEvent(FMLEvent event);
-
-    /**
      * Do your configuration here.
      * Use your ID as a root category.
      * @param configuration The config you should use.
