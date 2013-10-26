@@ -7,6 +7,8 @@ import com.forgeessentials.core.modules.FMLevents.IPreInit;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.Configuration;
 
@@ -64,7 +66,34 @@ public class ModuleLoader
         FMLEventHandler.passEvent(event);
     }
 
-    private static void doConfig()
+    public static void enable(MinecraftServer server)
+    {
+        for (String module : LOADED_MODULES)
+        {
+            MODULES_MAP.get(module).module.enable(server);
+            MODULES_MAP.get(module).state = ModuleState.ENABLED;
+        }
+    }
+
+    public static void disable()
+    {
+        for (String module : LOADED_MODULES)
+        {
+            MODULES_MAP.get(module).module.disable();
+            MODULES_MAP.get(module).state = ModuleState.DISABLED;
+        }
+    }
+
+    public static void reload()
+    {
+        doConfig();
+        for (String module : LOADED_MODULES)
+        {
+            MODULES_MAP.get(module).module.reload();
+        }
+    }
+
+    public static void doConfig()
     {
         for (String module : LOADED_MODULES)
         {

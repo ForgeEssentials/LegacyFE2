@@ -1,6 +1,7 @@
 package com.forgeessentials.core.modules;
 
 import cpw.mods.fml.common.event.FMLEvent;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 
 import java.lang.annotation.ElementType;
@@ -55,4 +56,23 @@ public interface IFEModule
      * @param configuration The config you should use.
      */
     public void doConfig(Configuration configuration);
+
+    /**
+     * Use this to initialize the module. This may be called multiple times as it runs every time an SSP server starts.
+     * @see cpw.mods.fml.common.event.FMLServerStartingEvent
+     * @param server
+     */
+    public void enable(MinecraftServer server);
+
+    /**
+     * Called when the server is stopping.
+     * @see cpw.mods.fml.common.event.FMLServerStoppingEvent
+     */
+    public void disable();
+
+    /**
+     * Called when the user wants to reload the configurations.
+     * doConfig(Configuration) gets called right before this.
+     */
+    public void reload();
 }
