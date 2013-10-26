@@ -40,7 +40,7 @@ ext.defaultServer = true
 
 minecraft {
 	minecraftVersion = "1.6.4"
-    accessTransformers = "**/*.at"
+    accessTransformers = "Core/src/main/resources/feCore.at"
 }
 
 // for the default internal minecraft jar
