@@ -96,10 +96,6 @@ subprojects
 		
 		// manifest generation
 		manifest {
-			
-			// TODO: Dries fix these!!!  no periods allowed in manifest keys!
-			// Maybe uise manifest sections or something.. and read up on the manifest spec.
-		
 			// versions
 			attributes version: project.version, mcversion: rootProject.minecraft.minecraftVersion
 			// asm stuff and ATs
