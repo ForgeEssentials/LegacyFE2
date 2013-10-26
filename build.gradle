@@ -40,6 +40,7 @@ ext.defaultServer = true
 
 minecraft {
 	minecraftVersion = "1.6.4"
+    accessTransformers = "**/*.at"
 }
 
 // for the default internal minecraft jar
