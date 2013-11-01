@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-		classpath 'com.github.abrarsyed.gmcp:GMCP:latest.integration'  // gets the VERY LATEST GMCP of all time :)
+        classpath 'com.github.abrarsyed.gmcp:GMCP:latest.integration' // gets the VERY LATEST GMCP of all time :)
     }
 }
 
@@ -12,41 +12,28 @@ apply plugin: "gmcp_mcsolo"
 // do imports
 import com.github.abrarsyed.gmcp.tasks.obfuscate.ReobfTask;
 import com.github.abrarsyed.gmcp.Util
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
 
 // bamboo vars
 if (!hasProperty('branch'))
 {
-	ext.branch = 'master'
-	logger.lifecycle "SETTING BRANCH TO MASTER"
+    ext.branch = 'master'
+    logger.lifecycle "SETTING BRANCH TO MASTER"
 }
 if (!hasProperty('buildnumber'))
 {
-	ext.buildnumber = 0
-	logger.lifecycle "SETTING BUILDNUMBER TO 0"
+    ext.buildnumber = 0
+    logger.lifecycle "SETTING BUILDNUMBER TO 0"
 }
 
-// define extra stuff.
-ext.asm = []
-ext.ats = []
-ext.moduleDeps = []
-ext.deps = []
-ext.defaultClient = false
-ext.defaultServer = true
-
 minecraft {
-	minecraftVersion = "1.6.4"
+    minecraftVersion = "1.6.4"
     accessTransformers += "Core/src/main/resources/feCore.at"
 }
 
 // for the default internal minecraft jar
 jar {
-	baseName = 'minecraft'
-	version = minecraft.minecraftVersion
+    destinationDir = new File(rootProject.getBuildDir(), 'libs')
+    archiveName = "minecraft-recompiled-${project.minecraft.minecraftVersion}.jar"
 }
 
 dependencies {
@@ -59,102 +46,107 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-allprojects
-{
-	sourceCompatibility = '1.7'
-	targetCompatibility = '1.6'
-	archivePath = Util.baseFile("minecraft-recompiled-${project.minecraft.minecraftVersion}.jar")
+allprojects {
+    sourceCompatibility = '1.7'
+    targetCompatibility = '1.6'
+
+    // define extra stuff.
+    ext.asm = []
+    ext.ats = []
+    ext.moduleDeps = []
+    ext.deps = []
+    ext.defaultClient = false
+    ext.defaultServer = true
 }
 
-subprojects
-{
-	apply plugin: 'java'
-	
-	afterEvaluate {
-		// tack on the BuildNumber
-		version += '.'+buildnumber
-	}
-	
-    repositories
-	{
-        maven
-		{
-			name 'forge'
-			url 'http://files.minecraftforge.net/maven'
+subprojects {
+    apply plugin: 'java'
+
+    afterEvaluate {
+        // tack on the BuildNumber
+        version += '.' + buildnumber
+
+        jar {
+            // manifest generation
+            manifest {
+                // versions
+                attributes version: project.version, mcversion: rootProject.minecraft.minecraftVersion
+                // asm stuff and ATs
+                attributes "FECoreASM": asm.join(' '), "FECoreAT": ats.join(' ')
+                // libds and deps
+                attributes "FECoreLibsMaven": deps.join(' ')
+            }
         }
-        maven
-		{
-			name "minecraft"
-			url "http://s3.amazonaws.com/Minecraft.Download/libraries"
+
+        dependencies {
+            // you add it to the list, il add it here
+            deps.each { dep ->
+                compile dep
+            }
+
+            // same for module deps
+            moduleDeps.each { dep ->
+                compile project(":$dep")
+            }
         }
-        
-		mavenCentral()
-	}
-	
-	jar {
-		destinationDir = new File(rootProject.getBuildDir(), 'libs')
-		
-		// manifest generation
-		manifest {
-			// versions
-			attributes version: project.version, mcversion: rootProject.minecraft.minecraftVersion
-			// asm stuff and ATs
-			attributes "FECoreASM": asm.join(' '), "FECoreAT": ats.join(' ')
-			// libds and deps
-			attributes "FECoreLibsMaven": deps.join(' ')
-		}
-	}
-	
+
+        // custom json task
+        task('genJson', type: JsonTask) {
+            moduleDeps = moduleDeps
+            version = project.version
+            mcVersion = rootProject.minecraft.minecraftVersion
+            jarFile = { project.tasks.jar.archivePath }
+            defaultClient = project.defaultClient
+            defaultServer = project.defaultServer
+
+            // HELP?
+            branch = rootProject.branch
+            dependsOn ":reobf"
+        }
+
+        rootProject.tasks.reobf {
+            reobf(tasks.jar) { spec ->
+                spec.classpath = sourceSets.main.compileClasspath
+            }
+        }
+
+        // task dependency :)
+        rootProject.tasks.build.dependsOn project.tasks.genJson
+    }
+
+    repositories {
+        maven {
+            name 'forge'
+            url 'http://files.minecraftforge.net/maven'
+        }
+        maven {
+            name "minecraft"
+            url "http://s3.amazonaws.com/Minecraft.Download/libraries"
+        }
+
+        mavenCentral()
+    }
+
+    jar {
+        destinationDir = new File(rootProject.getBuildDir(), 'libs')
+    }
+
     dependencies {
-		compile rootProject
-		
-		// you add it to the list, il add it here
-		deps.each { dep ->
-			compile dep
-		}
-		
-		// same for module deps
-		moduleDeps.each { dep ->
-			compile project(":$dep")
-		}
-		
-		testCompile 'junit:junit:4.11'
-	}
-	
-	// custom json task
-	task('genJson', type: JsonTask) {
-		moduleDeps = moduleDeps
-		version = project.version
-		mcVersion = rootProject.minecraft.minecraftVersion
-		jarFile = { project.tasks.jar.archivePath }
-		defaultClient = project.defaultClient
-		defaultServer = project.defaultServer
-		
-		// HELP?
-		branch = project.branch
-	}
-	
-	// task dependency :)
-	rootProject.tasks.build.dependsOn project.tasks.genJson
+        compile rootProject
+
+        testCompile 'junit:junit:4.11'
+    }
 }
 
 // make them all depend on the core
-configure(subprojects.findAll {it.name != 'Core'}) {
+configure(subprojects.findAll { it.name != 'Core' }) {
     dependencies {
-		compile project.project(':Core')
-	}
+        compile project.project(':Core')
+    }
 }
 
 // to reobfuscate the tasks properly
-task 'reobf'(type: ReobfTask, dependsOn: 'genReobfSrgs') {
-	subprojects.each { proj ->
-		reobf(proj.tasks.jar) { spec ->
-			spec.classpath = proj.sourceSets.main.compileClasspath
-		}
-		// needs to be done later... like here
-		proj.tasks.genJson.dependsOn rootProject.tasks.reobf
-	}
-}
+task 'reobf'(type: ReobfTask, dependsOn: 'genReobfSrgs')
 
 // ----------------------------
 // JSON TASK!
@@ -176,8 +168,8 @@ public class JsonTask extends DefaultTask
 
     @Input
     def baseUrl = "dl.forgeessentials.com/modules/"
-	
-	@Input
+
+    @Input
     def defaultClient = false
 
     @Input
@@ -187,42 +179,42 @@ public class JsonTask extends DefaultTask
     def jarFile
 
     @OutputFile
-    def output =  { getJarFile().getPath().replace("jar", "json") }
+    def output = { getJarFile().getPath().replace("jar", "json") }
 
     @TaskAction
     def doTask()
     {
         jarFile = project.file(jarFile)
-	    
+
         def builder = new groovy.json.JsonBuilder()
 
         builder.invokeMethod(project.name, [{
-            invokeMethod("default") {
-                client defaultClient
-                server defaultServer
-            }
-            invokeMethod(mcVersion) {
-                invokeMethod(branch) {
-                    files {
-                        filename jarFile.getName()
-                        url baseUrl + jarFile.getName()
-                        hash Util.hash(jarFile)
-                    }
-                    dependencies moduleDeps
-                }
-            }
-        }])
+                                                invokeMethod("default") {
+                                                    client defaultClient
+                                                    server defaultServer
+                                                }
+                                                invokeMethod(mcVersion) {
+                                                    invokeMethod(branch) {
+                                                        files {
+                                                            filename jarFile.getName()
+                                                            url baseUrl + jarFile.getName()
+                                                            hash Util.hash(jarFile)
+                                                        }
+                                                        dependencies moduleDeps
+                                                    }
+                                                }
+                                            }])
 
         project.file(output).write builder.toPrettyString()
     }
-	
-	File getJarFile()
-	{
-		return project.file(jarFile)
-	}
-	
-		File getOutput()
-	{
-		return project.file(output)
-	}
+
+    File getJarFile()
+    {
+        return project.file(jarFile)
+    }
+
+    File getOutput()
+    {
+        return project.file(output)
+    }
 }
