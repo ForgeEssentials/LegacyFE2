@@ -1,120 +1,42 @@
 package com.forgeessentials.core.modules;
 
-import com.forgeessentials.core.CoreConfig;
-import com.forgeessentials.core.ForgeEssentials;
-import com.forgeessentials.core.modules.FMLevents.FMLEventHandler;
-import com.forgeessentials.core.modules.FMLevents.IPreInit;
-import cpw.mods.fml.common.discovery.ASMDataTable;
-import cpw.mods.fml.common.event.FMLEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import com.forgeessentials.core.modules.internal.ModuleLoaderImpl;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.Configuration;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-
-import static com.forgeessentials.core.ForgeEssentials.LOGGER;
-
-public class ModuleLoader
+public interface ModuleLoader
 {
-    private static final HashMap<String, ModuleContainer> MODULES_MAP               = new HashMap<String, ModuleContainer>();
-    private static final HashSet<String>                  LOADED_MODULES            = new HashSet<String>();
+    /**
+     * reloads the configs of all possible modules.
+     */
+    void reloadAllModules();
 
     /**
-     * Gets called to load modules and do config and pass on the FMLPreInitializationEvent.
-     *
-     * @param event used for its ASM data
+     * Returns null if the specified module does not exist.
+     * @return NULL if the specified module does not exist.
      */
-    public static void init(FMLPreInitializationEvent event)
-    {
-        LOGGER.info("Discovering all modules...");
-        String description = event.getModMetadata().description;
-        description += "\n" + EnumChatFormatting.UNDERLINE + "Modules:" + EnumChatFormatting.RESET + "\n";
+    ModuleContainer getModule(String moduleName);
 
-        for (ASMDataTable.ASMData data : event.getAsmData().getAll(IFEModule.LoadMe.class.getName()))
-        {
-            try
-            {
-                ModuleContainer container = new ModuleContainer(data);
-                description += "\n" + (container.loaded ? EnumChatFormatting.DARK_GREEN : EnumChatFormatting.DARK_RED) + container.name + EnumChatFormatting.RESET;
-                if (container.loaded)
-                {
-                    LOADED_MODULES.add(container.name);
-                    FMLEventHandler.checkInterfaces(container.module);
-                }
-                else
-                {
-                    LOGGER.warn("Not loading {}", container.name);
-                }
+    boolean doesModuleExist(String moduleName);
 
-                MODULES_MAP.put(container.name, container);
-            }
-            catch (Exception e)
-            {
-                LOGGER.error("An error occurred while trying to load a module from class {}", data.getClassName());
-                e.printStackTrace();
-            }
-        }
+    boolean isModuleEnabled(String moduleName);
 
-        event.getModMetadata().description = description;
+    /**
+     * Enables the specified module if it exists and can be enabled.
+     * @param moduleName
+     * @param server
+     */
+    void enableModule(String moduleName, MinecraftServer server);
 
-        doConfig();
+    /**
+     * Disables the specified module if it exists and is currently enabled.
+     * @param moduleName
+     */
+    void disableModule(String moduleName);
 
-        FMLEventHandler.passEvent(event);
-    }
-
-    public static void enable(MinecraftServer server)
-    {
-        for (String module : LOADED_MODULES)
-        {
-            MODULES_MAP.get(module).module.enable(server);
-            MODULES_MAP.get(module).state = ModuleState.ENABLED;
-        }
-    }
-
-    public static void disable()
-    {
-        for (String module : LOADED_MODULES)
-        {
-            MODULES_MAP.get(module).module.disable();
-            MODULES_MAP.get(module).state = ModuleState.DISABLED;
-        }
-    }
-
-    public static void reload()
-    {
-        doConfig();
-        for (String module : LOADED_MODULES)
-        {
-            MODULES_MAP.get(module).module.reload();
-        }
-    }
-
-    public static void doConfig()
-    {
-        for (String module : LOADED_MODULES)
-        {
-            Configuration configuration = CoreConfig.INSTANCE.useOneConfig ? CoreConfig.INSTANCE.getConfiguration() : new Configuration(new File(ForgeEssentials.SETTINGS_DIR, module + ".cfg"));
-            MODULES_MAP.get(module).module.doConfig(configuration);
-            configuration.save();
-        }
-    }
-
-    public static ModuleContainer getModule(String name)
-    {
-        return MODULES_MAP.get(name);
-    }
-
-    public static boolean isModulePresent(String name)
-    {
-        return MODULES_MAP.containsKey(name);
-    }
-
-    public static boolean isModuleLoaded(String name)
-    {
-        return LOADED_MODULES.contains(name);
-    }
+    /**
+     * Reloads the configs for the specified module if it exists.
+     * This happens regardless if the module is enabled or not.
+     * @param moduleName
+     */
+    void reloadModule(String moduleName);
 }

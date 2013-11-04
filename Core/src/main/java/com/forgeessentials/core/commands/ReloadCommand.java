@@ -1,6 +1,6 @@
 package com.forgeessentials.core.commands;
 
-import com.forgeessentials.core.modules.ModuleLoader;
+import com.forgeessentials.core.modules.internal.ModuleLoaderImpl;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
@@ -29,7 +29,7 @@ public class ReloadCommand extends FECommanBase
     public void processCommand(ICommandSender icommandsender, String[] astring)
     {
         icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("Reloading...").setColor(EnumChatFormatting.YELLOW));
-        ModuleLoader.reload();
+        ModuleLoaderImpl.reload();
         icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("Done reloading!").setColor(EnumChatFormatting.DARK_GREEN));
     }
 }

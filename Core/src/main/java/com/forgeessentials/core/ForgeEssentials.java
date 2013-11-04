@@ -1,5 +1,6 @@
 package com.forgeessentials.core;
 
+import com.forgeessentials.core.modules.ModuleLoader;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import org.slf4j.Logger;
@@ -48,5 +49,10 @@ public class ForgeEssentials
         {
             LOGGER.warn("Log file has failed!", e);
         }
+    }
+
+    public static ModuleLoader getModuleLoder()
+    {
+        return ForgeEssentialsMod.instance.moduleLoader;
     }
 }

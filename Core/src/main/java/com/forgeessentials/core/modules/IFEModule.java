@@ -1,13 +1,18 @@
 package com.forgeessentials.core.modules;
 
+import com.forgeessentials.core.modules.events.ModuleDisableEvent;
+import com.forgeessentials.core.modules.events.ModuleEnableEvent;
 import cpw.mods.fml.common.event.FMLEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 
+import java.io.File;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 
 /**
  * An interface to mark ForgeEssentials modules.
@@ -46,33 +51,41 @@ public interface IFEModule
      * This method should return the version of the Module.
      * Acepted formats are: "#.#.#.#", "#.#.#", and "#.#"
      * The returned string MAY NOT include arbitrary letters, symbols, or spaces.
-     * It is reccomended that the
+     * his method will only be called once, immediately after the class is instantiated.
      */
     public abstract String getVersion();
 
     /**
-     * Do your configuration here.
-     * Use your ID as a root category.
-     * @param configuration The config you should use.
+     * Load any configuration here.
+     * This is executed before enable method when a minecraft starts, and it is executed later on when a module is reloaded.
+     *
+     * @param file The config file you should use.
+     * @param reloading TRUE if this method is being executed for reload purposes. FALSE if this is the initial loading of the module.
      */
-    public void doConfig(Configuration configuration);
+    public void doConfig(File file, boolean reloading);
 
     /**
-     * Use this to initialize the module. This may be called multiple times as it runs every time an SSP server starts.
+     * Use this to initialize the module.
+     * This will never be called twice in a row. The disable method will always be called between consecutive calls to this method.
+     *
+     * @param event
      * @see cpw.mods.fml.common.event.FMLServerStartingEvent
-     * @param server
      */
-    public void enable(MinecraftServer server);
+    public void enable(ModuleEnableEvent event);
 
     /**
      * Called when the server is stopping.
+     * This will never be called twice in a row. The enable method will always be called between consecutive calls to this method.
+     *
+     * @param event
      * @see cpw.mods.fml.common.event.FMLServerStoppingEvent
      */
-    public void disable();
+    public void disable(ModuleDisableEvent event);
 
     /**
-     * Called when the user wants to reload the configurations.
-     * doConfig(Configuration) gets called right before this.
+     *
+     * @param container
+     * @param messages
      */
-    public void reload();
+    public void receiveInterModMessages(ModuleContainer container, List<FMLInterModComms.IMCMessage> messages);
 }

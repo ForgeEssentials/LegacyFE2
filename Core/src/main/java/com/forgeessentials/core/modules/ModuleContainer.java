@@ -1,71 +1,40 @@
 package com.forgeessentials.core.modules;
 
-import com.forgeessentials.core.ForgeEssentials;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.discovery.ASMDataTable;
-
-import java.lang.annotation.Annotation;
-
-import static com.forgeessentials.core.ForgeEssentials.LOGGER;
-
-public class ModuleContainer
+public interface ModuleContainer
 {
-    public final String                     name;
-    public final IFEModule                  module;
-    public final Class<? extends IFEModule> clazz;
-    public final IFEModule.LoadMe           annotation;
-    public final boolean                    loadOnClient;
-    public final boolean                    loadOnServer;
-    public final boolean                    loaded;
 
-    public ModuleState state = ModuleState.UNLOADED;
+    /**
+     * @return The modules ID.
+     */
+    String getModuleName();
 
-    public ModuleContainer(ASMDataTable.ASMData asmData)
-    {
-        try
-        {
-            LOGGER.info("Module class:  " + asmData.getClassName());
+    /**
+     * @return The modules version as dictated by { @link com.forgeessentials.core.modules.IFeModule.getVersion() }
+     */
+    String getModuleVersion();
 
-            // the classCast exception is caught later
-            clazz = (Class<? extends IFEModule>) Class.forName(asmData.getClassName());
+    /**
+     * This will return null until the modules state is { @link com.forgeessentials.core.modules.ModuleState.INSTANTIATED}
+     *
+     * @return an instance of the module.
+     */
+    IFEModule getModuleInstance();
 
-            annotation = clazz.getAnnotation(IFEModule.LoadMe.class);
-            name = annotation.name();
-            loadOnClient = annotation.loadOnClient();
-            loadOnServer = annotation.loadOnServer();
+    /**
+     * @return the class object of this module.
+     */
+    Class<? extends IFEModule> getModuleClass();
 
-            loaded = (FMLCommonHandler.instance().getSide().isClient() && loadOnClient) || (FMLCommonHandler.instance().getSide().isServer() && loadOnServer);
+    boolean loadsOnClient();
 
-            if (loaded)
-            {
-                module = (IFEModule) clazz.newInstance();
-                state = ModuleState.LOADED;
-            }
-            else
-            {
-                module = null;
-            }
-        }
-        // all the catch statements
-        catch (ClassNotFoundException e)
-        {
-            throw new RuntimeException(asmData.getClassName() + " does not exist!");
-        }
-        catch (ClassCastException e)
-        {
-            throw new RuntimeException(asmData.getClassName() + " must implement IFEModule!");
-        }
-        catch (NoClassDefFoundError e)
-        {
-            throw new RuntimeException(asmData.getClassName() + " does not exist!");
-        }
-        catch (InstantiationException e)
-        {
-            throw new RuntimeException(asmData.getClassName() + " must have an empty public constructor!");
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException(asmData.getClassName() + " must have an empty public constructor!");
-        }
-    }
+    boolean loadsOnServer();
+
+    /**
+     * This is evaluated by the checking if the current run is a Server or a Client, and whether the module should be loaded on.
+     *
+     * @return Whether or not this module will be loaded.
+     */
+    boolean shouldBeLoaded();
+
+    ModuleState getModuleState();
 }

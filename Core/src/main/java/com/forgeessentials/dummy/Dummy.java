@@ -1,15 +1,14 @@
 package com.forgeessentials.dummy;
 
-import static com.forgeessentials.core.ForgeEssentials.LOGGER;
-
 import com.forgeessentials.core.ForgeEssentials;
-import com.forgeessentials.core.modules.FMLevents.IPreInit;
 import com.forgeessentials.core.modules.IFEModule;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.Configuration;
+import com.forgeessentials.core.modules.ModuleContainer;
+import com.forgeessentials.core.modules.events.ModuleDisableEvent;
+import com.forgeessentials.core.modules.events.ModuleEnableEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
+
+import java.io.File;
+import java.util.List;
 
 @IFEModule.LoadMe(name = "Dummy")
 public class Dummy implements IFEModule
@@ -22,26 +21,27 @@ public class Dummy implements IFEModule
     }
 
     @Override
-    public void doConfig(Configuration configuration)
+    public void doConfig(File file, boolean reloading)
     {
-        ForgeEssentials.LOGGER.info("Dummy doConfig");
+        ForgeEssentials.LOGGER.info("Dummy doConfig file: {}  reoload: {}", file, reloading);
     }
 
     @Override
-    public void enable(MinecraftServer server)
+    public void enable(ModuleEnableEvent event)
     {
         ForgeEssentials.LOGGER.info("Dummy enable");
+        event.getLogger().info("Logger Test");
     }
 
     @Override
-    public void disable()
+    public void disable(ModuleDisableEvent event)
     {
         ForgeEssentials.LOGGER.info("Dummy disable");
     }
 
     @Override
-    public void reload()
+    public void receiveInterModMessages(ModuleContainer container, List<FMLInterModComms.IMCMessage> messages)
     {
-        ForgeEssentials.LOGGER.info("Dummy reload");
+        ForgeEssentials.LOGGER.info("Dummy Messages");
     }
 }

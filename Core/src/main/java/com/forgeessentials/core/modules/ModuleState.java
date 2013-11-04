@@ -3,7 +3,9 @@ package com.forgeessentials.core.modules;
 public enum ModuleState
 {
     UNLOADED,
-    LOADED,
+    CLASSLOADED,
+    INSTANTIATED,
+    CONFIGURED,
     ENABLED,
     DISABLED
 }
