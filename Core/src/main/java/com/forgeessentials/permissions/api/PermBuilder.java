@@ -10,7 +10,7 @@ public interface PermBuilder
 
     PermBuilder setUserName(String name);
 
-    PermBuilder SetPermNode(String node);
+    PermBuilder setPermNode(String node);
 
     PermBuilder setTargetContext(ILocation context);
 

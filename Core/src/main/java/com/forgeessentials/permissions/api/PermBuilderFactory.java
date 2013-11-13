@@ -1,8 +1,8 @@
 package com.forgeessentials.permissions.api;
 
-public interface PermBuilderFactory
+public interface PermBuilderFactory<T extends PermBuilder>
 {
-    PermBuilder builder();
+    T builder();
 
-    PermBuilder builder(String username, String permNode);
+    T builder(String username, String permNode);
 }

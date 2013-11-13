@@ -28,8 +28,7 @@ public final class PermissionsManager
         return FACTORY.builder(player.username, node).setUserContext(player).setTargetContext(targetContext).check();
     }
 
-
-    public static PermBuilder gertPerm(String username, String node)
+    public static PermBuilder getPerm(String username, String node)
     {
         return FACTORY.builder(username, node);
     }
