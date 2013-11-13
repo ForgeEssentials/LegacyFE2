@@ -1,5 +1,6 @@
 package com.forgeessentials.permissions.api;
 
+import com.forgeessentials.permissions.api.context.IContext;
 import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,11 +13,7 @@ public interface PermBuilder
 
     PermBuilder setPermNode(String node);
 
-    PermBuilder setTargetContext(ILocation context);
+    PermBuilder setTargetContext(IContext context);
 
-    PermBuilder setTargetContext(Entity entity);
-
-    PermBuilder setUserContext(ILocation context);
-
-    PermBuilder setUserContext(Entity entity);
+    PermBuilder setUserContext(IContext context);
 }
