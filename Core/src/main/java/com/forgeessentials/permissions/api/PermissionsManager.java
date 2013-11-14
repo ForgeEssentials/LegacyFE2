@@ -13,6 +13,8 @@ public final class PermissionsManager
         // no touch
     }
 
+    private static boolean wasSet = false;
+    private static final PermBuilderFactory DEFAULT = null; // for now.
     private static PermBuilderFactory FACTORY;
 
     public static boolean checkPerm(EntityPlayer player, String node)
@@ -77,8 +79,21 @@ public final class PermissionsManager
         return FACTORY;
     }
 
-    public static PermBuilderFactory setPermFactory()
+    public static void setPermFactory(PermBuilderFactory factory) throws IllegalStateException
     {
-        return FACTORY;
+        if (factory == null)
+        {
+            factory = DEFAULT;
+            wasSet = false;
+        }
+        else if (wasSet)
+        {
+            throw new IllegalStateException("Two Mods are trying to register permissions systems!");
+        }
+        else
+        {
+            FACTORY = factory;
+            wasSet = true;
+        }
     }
 }

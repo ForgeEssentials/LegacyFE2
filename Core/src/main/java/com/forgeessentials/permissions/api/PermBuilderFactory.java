@@ -6,10 +6,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.List;
+import java.util.Map;
+
 public interface PermBuilderFactory<T extends PermBuilder>
 {
     /**
-     * This method should return a fresh unadultrated PermBuilder instance with no default values.
+     * This method should return a fresh unadulterated PermBuilder instance with no default values.
      * @return a new instance of your PermBuilder.
      */
     T builder();
@@ -46,4 +49,10 @@ public interface PermBuilderFactory<T extends PermBuilder>
      * @return The default IContext instance of this object for this Implementation.
      */
     IContext getDefaultContext(Object entity);
+
+    /**
+     * This is where permissions are registerred with their default value.
+     * @param perms
+     */
+    void registerPermissions(Map<String, RegisteredPermValue> perms);
 }
