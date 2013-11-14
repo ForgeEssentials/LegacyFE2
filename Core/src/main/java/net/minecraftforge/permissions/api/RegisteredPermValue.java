@@ -1,4 +1,4 @@
-package com.forgeessentials.permissions.api;
+package net.minecraftforge.permissions.api;
 
 public enum RegisteredPermValue
 {

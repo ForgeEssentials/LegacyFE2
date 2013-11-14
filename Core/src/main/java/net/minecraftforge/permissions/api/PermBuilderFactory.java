@@ -1,12 +1,11 @@
-package com.forgeessentials.permissions.api;
+package net.minecraftforge.permissions.api;
 
-import com.forgeessentials.permissions.api.context.IContext;
+import net.minecraftforge.permissions.api.context.IContext;
 import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.List;
 import java.util.Map;
 
 public interface PermBuilderFactory<T extends PermBuilder>

@@ -1,4 +1,4 @@
-package com.forgeessentials.permissions.api.context;
+package net.minecraftforge.permissions.api.context;
 
 import net.minecraft.entity.player.EntityPlayer;
 
