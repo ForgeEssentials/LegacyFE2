@@ -1,9 +1,8 @@
 package com.forgeessentials.permissions.api.context;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class PlayerContext extends EntityContext
+public class PlayerContext extends EntityContext implements INamed
 {
     private final String username;
 
@@ -13,7 +12,8 @@ public class PlayerContext extends EntityContext
         username = entity.username;
     }
 
-    public String getUsername()
+    @Override
+    public String getName()
     {
         return username;
     }
