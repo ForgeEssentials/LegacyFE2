@@ -1,6 +1,6 @@
 package net.minecraftforge.permissions.api.context;
 
-public interface ILocationContext
+public interface ILocationContext extends IContext
 {
     double getX();
 

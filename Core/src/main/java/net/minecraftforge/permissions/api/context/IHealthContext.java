@@ -1,6 +1,6 @@
 package net.minecraftforge.permissions.api.context;
 
-public interface IHealthContext
+public interface IHealthContext extends IContext
 {
     float getMaxHealth();
 
