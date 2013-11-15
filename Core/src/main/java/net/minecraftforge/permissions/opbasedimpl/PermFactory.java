@@ -2,20 +2,23 @@ package net.minecraftforge.permissions.opbasedimpl;
 
 import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.permissions.api.PermBuilder;
 import net.minecraftforge.permissions.api.PermBuilderFactory;
 import net.minecraftforge.permissions.api.RegisteredPermValue;
-import net.minecraftforge.permissions.api.context.IContext;
-import net.minecraftforge.permissions.api.context.PlayerContext;
+import net.minecraftforge.permissions.api.context.*;
+import net.minecraftforge.permissions.opbasedimpl.context.Point;
+import net.minecraftforge.permissions.opbasedimpl.context.TileEntityContext;
+import net.minecraftforge.permissions.opbasedimpl.context.WorldContext;
 
 import java.util.Map;
 
 public class PermFactory implements PermBuilderFactory
 {
-
+    public static final IContext GLOBAL = new IContext() {};
 
     @Override
     public PermBuilder builder()
@@ -38,42 +41,45 @@ public class PermFactory implements PermBuilderFactory
     @Override
     public IContext getDefaultContext(TileEntity te)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new TileEntityContext(te);
     }
 
     @Override
     public IContext getDefaultContext(ILocation loc)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new Point(loc);
     }
 
     @Override
     public IContext getDefaultContext(Entity entity)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new EntityContext(entity);
     }
 
     @Override
     public IContext getDefaultContext(World world)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new WorldContext(world);
     }
 
     @Override
     public IContext getGlobalContext()
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return GLOBAL;
     }
 
     @Override
     public IContext getDefaultContext(Object entity)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (entity instanceof EntityLiving)
+            return new EntityLivingContext((EntityLiving) entity);
+        else
+            return GLOBAL;
     }
 
     @Override
     public void registerPermissions(Map<String, RegisteredPermValue> perms)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // TODO: stuff
     }
 }
