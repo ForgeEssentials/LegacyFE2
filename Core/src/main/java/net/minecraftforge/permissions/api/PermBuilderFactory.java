@@ -1,5 +1,6 @@
 package net.minecraftforge.permissions.api;
 
+import com.google.gson.JsonObject;
 import net.minecraft.world.World;
 import net.minecraftforge.permissions.api.context.IContext;
 import net.minecraft.dispenser.ILocation;
@@ -7,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface PermBuilderFactory<T extends PermBuilder>
@@ -61,8 +63,22 @@ public interface PermBuilderFactory<T extends PermBuilder>
     IContext getDefaultContext(Object whoKnows);
 
     /**
-     * This is where permissions are registerred with their default value.
+     * This is where permissions are registered with their default value.
      * @param perms
      */
-    void registerPermissions(Map<String, RegisteredPermValue> perms);
+    void registerPermissions(List<PermReg> perms);
+
+    public static class PermReg
+    {
+        public final String              key;
+        public final RegisteredPermValue role;
+        public final JsonObject          data;
+
+        public PermReg(String key, RegisteredPermValue value, JsonObject obj)
+        {
+            this.key = key;
+            this.role = value;
+            this.data = obj;
+        }
+    }
 }

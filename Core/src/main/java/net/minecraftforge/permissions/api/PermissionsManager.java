@@ -6,6 +6,7 @@ import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.permissions.opbasedimpl.OpPermFactory;
 
 public final class PermissionsManager
 {
@@ -14,8 +15,8 @@ public final class PermissionsManager
         // no touch
     }
 
-    private static boolean wasSet = false;
-    private static final PermBuilderFactory DEFAULT = null; // for now.
+    private static       boolean            wasSet  = false;
+    private static final PermBuilderFactory DEFAULT = new OpPermFactory(); // for now.
     private static PermBuilderFactory FACTORY;
 
     public static boolean checkPerm(EntityPlayer player, String node)
@@ -102,7 +103,7 @@ public final class PermissionsManager
     {
         if (factory == null)
         {
-            factory = DEFAULT;
+            FACTORY = DEFAULT;
             wasSet = false;
         }
         else if (wasSet)
