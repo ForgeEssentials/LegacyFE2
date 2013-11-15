@@ -1,14 +1,10 @@
 package net.minecraftforge.permissions.api.context;
 
-public interface IBlockContext extends ILocationContext
+public interface IBlockContext extends IBlockLocationContext
 {
     int getBlockId();
 
     int getBlockMetadata();
 
-    int getBlockX();
-
-    int getBlockY();
-
-    int getBlockZ();
+    boolean hasTileEntity();
 }

@@ -10,5 +10,5 @@ public interface IAreaContext extends IContext
 
     boolean contains(ILocationContext loc);
 
-    List<ILocationContext> getLocations();
+    List<IBlockLocationContext> getLocations();
 }

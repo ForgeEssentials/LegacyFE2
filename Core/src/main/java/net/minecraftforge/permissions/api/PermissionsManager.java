@@ -1,5 +1,6 @@
 package net.minecraftforge.permissions.api;
 
+import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.permissions.api.context.IContext;
 import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,9 @@ public final class PermissionsManager
 
     public static boolean checkPerm(EntityPlayer player, String node)
     {
+        if (player instanceof FakePlayer)
+            throw new IllegalArgumentException("You cannot check permissions with a fake player. Use PermManager.getPerm(username, node)");
+
         IContext context = FACTORY.getDefaultContext(player);
         return FACTORY.builder(player.username, node)
                       .setUserContext(context)
@@ -28,6 +32,9 @@ public final class PermissionsManager
 
     public static boolean checkPerm(EntityPlayer player, String node, Entity targetContext)
     {
+        if (player instanceof FakePlayer)
+            throw new IllegalArgumentException("You cannot check permissions with a fake player. Use PermManager.getPerm(username, node)");
+
         return FACTORY.builder(player.username, node)
                       .setUserContext(FACTORY.getDefaultContext(player))
                       .setTargetContext(FACTORY.getDefaultContext(targetContext))
@@ -36,6 +43,9 @@ public final class PermissionsManager
 
     public static boolean checkPerm(EntityPlayer player, String node, ILocation targetContext)
     {
+        if (player instanceof FakePlayer)
+            throw new IllegalArgumentException("You cannot check permissions with a fake player. Use PermManager.getPerm(username, node)");
+
         return FACTORY.builder(player.username, node)
                       .setUserContext(FACTORY.getDefaultContext(player))
                       .setTargetContext(FACTORY.getDefaultContext(targetContext))
@@ -44,6 +54,9 @@ public final class PermissionsManager
 
     public static PermBuilder getPerm(EntityPlayer player, String node)
     {
+        if (player instanceof FakePlayer)
+            throw new IllegalArgumentException("You cannot check permissions with a fake player. Use PermManager.getPerm(username, node)");
+
         IContext context = FACTORY.getDefaultContext(player);
         return FACTORY.builder(player.username, node)
                       .setUserContext(context)
@@ -52,6 +65,9 @@ public final class PermissionsManager
 
     public static PermBuilder getPerm(EntityPlayer player, String node, Entity targetContext)
     {
+        if (player instanceof FakePlayer)
+            throw new IllegalArgumentException("You cannot check permissions with a fake player. Use PermManager.getPerm(username, node)");
+
         return FACTORY.builder(player.username, node)
                       .setUserContext(FACTORY.getDefaultContext(player))
                       .setTargetContext(FACTORY.getDefaultContext(targetContext));
@@ -59,6 +75,9 @@ public final class PermissionsManager
 
     public static PermBuilder getPerm(EntityPlayer player, String node, ILocation targetContext)
     {
+        if (player instanceof FakePlayer)
+            throw new IllegalArgumentException("You cannot check permissions with a fake player. Use PermManager.getPerm(username, node)");
+
         return FACTORY.builder(player.username, node)
                       .setUserContext(FACTORY.getDefaultContext(player))
                       .setTargetContext(FACTORY.getDefaultContext(targetContext));

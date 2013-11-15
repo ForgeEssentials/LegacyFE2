@@ -1,5 +1,6 @@
 package net.minecraftforge.permissions.api;
 
+import net.minecraft.world.World;
 import net.minecraftforge.permissions.api.context.IContext;
 import net.minecraft.dispenser.ILocation;
 import net.minecraft.entity.Entity;
@@ -35,7 +36,7 @@ public interface PermBuilderFactory<T extends PermBuilder>
     /**
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(ILocation te);
+    IContext getDefaultContext(ILocation loc);
 
     /**
      * @return The default IContext instance of this object for this Implementation.
@@ -43,11 +44,21 @@ public interface PermBuilderFactory<T extends PermBuilder>
     IContext getDefaultContext(Entity entity);
 
     /**
+     * @return The default IContext instance of this object for this Implementation.
+     */
+    IContext getDefaultContext(World world);
+
+    /**
+     * @return A IContext signifying the Server as a whole.
+     */
+    IContext getGlobalContext();
+
+    /**
      * At the very least, this method should return an anonymous instance of IContext.
      * This method should NEVER return null.
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(Object entity);
+    IContext getDefaultContext(Object whoKnows);
 
     /**
      * This is where permissions are registerred with their default value.

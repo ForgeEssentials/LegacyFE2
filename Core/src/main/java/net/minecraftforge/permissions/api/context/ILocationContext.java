@@ -1,12 +1,10 @@
 package net.minecraftforge.permissions.api.context;
 
-public interface ILocationContext extends IContext
+public interface ILocationContext extends IDimensionContext
 {
     double getX();
 
     double getY();
 
     double getZ();
-
-    int getDimension();
 }

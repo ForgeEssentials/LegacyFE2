@@ -38,7 +38,7 @@ public class EntityContext implements ILocationContext, IRotationContext
     }
 
     @Override
-    public int getDimension()
+    public int getDimensionId()
     {
         return dim;
     }
