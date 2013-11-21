@@ -3,8 +3,8 @@
 build
 gradle-app.setting
 
-# GMCP plugin
-/minecraft
+# ForgeGradle
+/run
 
 # eclipse
 .settings
@@ -17,4 +17,3 @@ bin
 out
 *.idea
 *.iml
-

@@ -1,17 +1,17 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
-        classpath 'com.github.abrarsyed.gmcp:GMCP:latest.integration' // gets the VERY LATEST GMCP of all time :)
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
     }
 }
 
-apply plugin: "gmcp_mcsolo"
-
-// do imports
-import com.github.abrarsyed.gmcp.tasks.obfuscate.ReobfTask;
-import com.github.abrarsyed.gmcp.Util
+apply plugin: "forge"
 
 // bamboo vars
 if (!hasProperty('branch'))
@@ -26,18 +26,12 @@ if (!hasProperty('buildnumber'))
 }
 
 minecraft {
-    minecraftVersion = "1.6.4"
-    accessTransformers += "Core/src/main/resources/feCore.at"
-}
-
-// for the default internal minecraft jar
-jar {
-    destinationDir = new File(rootProject.getBuildDir(), 'libs')
-    archiveName = "minecraft-recompiled-${project.minecraft.minecraftVersion}.jar"
+    version = "1.6.4-9.11.1.960"
+	assetDir = "run/assets"
+    //accessTransformers += "Core/src/main/resources/feCore.at"
 }
 
 dependencies {
-
     // logging
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'org.slf4j:slf4j-jdk14:1.7.5'
@@ -48,7 +42,7 @@ dependencies {
 
 allprojects {
     sourceCompatibility = '1.7'
-    targetCompatibility = '1.6'
+    targetCompatibility = '1.7'
 
     // define extra stuff.
     ext.asm = []
@@ -70,7 +64,7 @@ subprojects {
             // manifest generation
             manifest {
                 // versions
-                attributes version: project.version, mcversion: rootProject.minecraft.minecraftVersion
+                attributes version: project.version, mcversion: rootProject.minecraft.version
                 // asm stuff and ATs
                 attributes "FECoreASM": asm.join(' '), "FECoreAT": ats.join(' ')
                 // libds and deps
@@ -94,7 +88,7 @@ subprojects {
         task('genJson', type: JsonTask) {
             moduleDeps = moduleDeps
             version = project.version
-            mcVersion = rootProject.minecraft.minecraftVersion
+            mcVersion = rootProject.minecraft.version
             jarFile = { project.tasks.jar.archivePath }
             defaultClient = project.defaultClient
             defaultServer = project.defaultServer
@@ -138,19 +132,12 @@ subprojects {
     }
 }
 
-// make them all depend on the core
-configure(subprojects.findAll { it.name != 'Core' }) {
-    dependencies {
-        compile project.project(':Core')
-    }
-}
-
-// to reobfuscate the tasks properly
-task 'reobf'(type: ReobfTask, dependsOn: 'genReobfSrgs')
-
 // ----------------------------
 // JSON TASK!
 // ----------------------------
+
+// do imports
+import net.minecraftforge.gradle.common.Constants
 
 public class JsonTask extends DefaultTask
 {
@@ -198,7 +185,7 @@ public class JsonTask extends DefaultTask
                                                         files {
                                                             filename jarFile.getName()
                                                             url baseUrl + jarFile.getName()
-                                                            hash Util.hash(jarFile)
+                                                            hash Constants.hash(jarFile)
                                                         }
                                                         dependencies moduleDeps
                                                     }
