@@ -6,20 +6,15 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.permissions.api.PermBuilder;
 import net.minecraftforge.permissions.api.PermBuilderFactory;
-import net.minecraftforge.permissions.api.context.EntityContext;
-import net.minecraftforge.permissions.api.context.EntityLivingContext;
+import net.minecraftforge.permissions.api.context.impls.*;
 import net.minecraftforge.permissions.api.context.IContext;
-import net.minecraftforge.permissions.api.context.PlayerContext;
-import net.minecraftforge.permissions.opbasedimpl.context.Point;
-import net.minecraftforge.permissions.opbasedimpl.context.TileEntityContext;
-import net.minecraftforge.permissions.opbasedimpl.context.WorldContext;
+import net.minecraftforge.permissions.api.context.impls.Location;
 
 import java.util.List;
 import java.util.TreeSet;
 
-public class OpPermFactory implements PermBuilderFactory
+public class OpPermFactory implements PermBuilderFactory<Builder>
 {
     static TreeSet<String> opPerms      = new TreeSet<String>();
     static TreeSet<String> deniedPerms  = new TreeSet<String>();
@@ -28,13 +23,13 @@ public class OpPermFactory implements PermBuilderFactory
     public static final IContext GLOBAL = new IContext() {};
 
     @Override
-    public PermBuilder builder()
+    public Builder builder()
     {
         return new Builder();
     }
 
     @Override
-    public PermBuilder builder(String username, String permNode)
+    public Builder builder(String username, String permNode)
     {
         return new Builder().setUserName(username).setPermNode(permNode);
     }
@@ -54,7 +49,7 @@ public class OpPermFactory implements PermBuilderFactory
     @Override
     public IContext getDefaultContext(ILocation loc)
     {
-        return new Point(loc);
+        return new Location(loc);
     }
 
     @Override
@@ -105,10 +100,10 @@ public class OpPermFactory implements PermBuilderFactory
                 case NONOP:
                     allowedPerms.add(entry.key);
                     break;
-                case FALSE:
+                case DENY:
                     deniedPerms.add(entry.key);
                     break;
-                case TRUE:
+                case ALLOW:
                     allowedPerms.add(entry.key);
                     break;
             }

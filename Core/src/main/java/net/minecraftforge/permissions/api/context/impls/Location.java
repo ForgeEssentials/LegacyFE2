@@ -1,14 +1,14 @@
-package net.minecraftforge.permissions.opbasedimpl.context;
+package net.minecraftforge.permissions.api.context.impls;
 
 import net.minecraft.dispenser.ILocation;
 import net.minecraftforge.permissions.api.context.ILocationContext;
 
-public class Point implements ILocationContext
+public class Location implements ILocationContext
 {
     private final double x, y, z;
     private final int dim;
 
-    public Point(double x, double y, double z, int dim)
+    public Location(double x, double y, double z, int dim)
     {
         this.x = x;
         this.y = y;
@@ -16,7 +16,7 @@ public class Point implements ILocationContext
         this.dim = dim;
     }
 
-    public Point(ILocation loc)
+    public Location(ILocation loc)
     {
         x = loc.getX();
         y = loc.getY();

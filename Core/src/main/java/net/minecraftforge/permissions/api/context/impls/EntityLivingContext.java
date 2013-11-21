@@ -1,6 +1,7 @@
-package net.minecraftforge.permissions.api.context;
+package net.minecraftforge.permissions.api.context.impls;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraftforge.permissions.api.context.IHealthContext;
 
 public class EntityLivingContext extends EntityContext implements IHealthContext
 {

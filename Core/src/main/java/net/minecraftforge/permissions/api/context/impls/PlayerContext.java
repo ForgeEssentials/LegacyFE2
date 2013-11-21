@@ -1,6 +1,7 @@
-package net.minecraftforge.permissions.api.context;
+package net.minecraftforge.permissions.api.context.impls;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.permissions.api.context.INameContext;
 
 public class PlayerContext extends EntityContext implements INameContext
 {

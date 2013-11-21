@@ -2,15 +2,15 @@ package net.minecraftforge.permissions.api;
 
 import net.minecraftforge.permissions.api.context.IContext;
 
-public interface PermBuilder
+public interface PermBuilder<T extends PermBuilder>
 {
-    boolean check();
+    public boolean check();
 
-    PermBuilder setUserName(String name);
+    public T setUserName(String name);
 
-    PermBuilder setPermNode(String node);
+    public T setPermNode(String node);
 
-    PermBuilder setTargetContext(IContext context);
+    public T setTargetContext(IContext context);
 
-    PermBuilder setUserContext(IContext context);
+    public T setUserContext(IContext context);
 }

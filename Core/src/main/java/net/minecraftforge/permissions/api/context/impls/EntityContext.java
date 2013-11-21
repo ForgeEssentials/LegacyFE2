@@ -1,6 +1,8 @@
-package net.minecraftforge.permissions.api.context;
+package net.minecraftforge.permissions.api.context.impls;
 
 import net.minecraft.entity.Entity;
+import net.minecraftforge.permissions.api.context.ILocationContext;
+import net.minecraftforge.permissions.api.context.IRotationContext;
 
 public class EntityContext implements ILocationContext, IRotationContext
 {

@@ -17,56 +17,56 @@ public interface PermBuilderFactory<T extends PermBuilder>
      * This method should return a fresh unadulterated PermBuilder instance with no default values.
      * @return a new instance of your PermBuilder.
      */
-    T builder();
+    public T builder();
 
     /**
      * This method should return a PermBuilder instance with the username and PermNode set.
      * @return a new instance of your PermBuilder.
      */
-    T builder(String username, String permNode);
+    public T builder(String username, String permNode);
 
     /**
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(EntityPlayer player);
+    public IContext getDefaultContext(EntityPlayer player);
 
     /**
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(TileEntity te);
+    public IContext getDefaultContext(TileEntity te);
 
     /**
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(ILocation loc);
+    public IContext getDefaultContext(ILocation loc);
 
     /**
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(Entity entity);
+    public IContext getDefaultContext(Entity entity);
 
     /**
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(World world);
+    public IContext getDefaultContext(World world);
 
     /**
      * @return A IContext signifying the Server as a whole.
      */
-    IContext getGlobalContext();
+    public IContext getGlobalContext();
 
     /**
      * At the very least, this method should return an anonymous instance of IContext.
      * This method should NEVER return null.
      * @return The default IContext instance of this object for this Implementation.
      */
-    IContext getDefaultContext(Object whoKnows);
+    public IContext getDefaultContext(Object whoKnows);
 
     /**
      * This is where permissions are registered with their default value.
      * @param perms
      */
-    void registerPermissions(List<PermReg> perms);
+    public void registerPermissions(List<PermReg> perms);
 
     public static class PermReg
     {

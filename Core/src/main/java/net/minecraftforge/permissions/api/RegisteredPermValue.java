@@ -2,8 +2,8 @@ package net.minecraftforge.permissions.api;
 
 public enum RegisteredPermValue
 {
-    TRUE,
-    FALSE,
+    ALLOW,
+    DENY,
     OP,
     NONOP,
 }

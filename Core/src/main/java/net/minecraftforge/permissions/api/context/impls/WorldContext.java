@@ -1,4 +1,4 @@
-package net.minecraftforge.permissions.opbasedimpl.context;
+package net.minecraftforge.permissions.api.context.impls;
 
 import net.minecraft.world.World;
 import net.minecraftforge.permissions.api.context.IDimensionContext;
