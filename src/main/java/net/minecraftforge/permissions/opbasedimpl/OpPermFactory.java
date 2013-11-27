@@ -19,7 +19,7 @@ import net.minecraftforge.permissions.opbasedimpl.context.WorldContext;
 import java.util.List;
 import java.util.TreeSet;
 
-public class OpPermFactory implements PermBuilderFactory
+public class OpPermFactory implements PermBuilderFactory<Builder>
 {
     static TreeSet<String> opPerms      = new TreeSet<String>();
     static TreeSet<String> deniedPerms  = new TreeSet<String>();
@@ -28,13 +28,13 @@ public class OpPermFactory implements PermBuilderFactory
     public static final IContext GLOBAL = new IContext() {};
 
     @Override
-    public PermBuilder builder()
+    public Builder builder()
     {
         return new Builder();
     }
 
     @Override
-    public PermBuilder builder(String username, String permNode)
+    public Builder builder(String username, String permNode)
     {
         return new Builder().setUserName(username).setPermNode(permNode);
     }

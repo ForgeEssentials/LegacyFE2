@@ -51,6 +51,14 @@ allprojects {
     ext.deps = []
     ext.defaultClient = false
     ext.defaultServer = true
+	
+	sourceSets.main.resources.getFiles().each { file ->
+		if (file.getName().endsWith(".at") || file.getName().endsWith("_at.cfg"))
+		{
+			ats += file.getName();
+			rootProject.minecraft.at file.getPath()
+		}
+	}
 }
 
 subprojects {
@@ -117,7 +125,6 @@ subprojects {
             name "minecraft"
             url "http://s3.amazonaws.com/Minecraft.Download/libraries"
         }
-
         mavenCentral()
     }
 

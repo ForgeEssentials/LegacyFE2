@@ -16,4 +16,9 @@ public abstract class FECommanBase extends CommandBase implements IFECommand
         //Todo: implement permission checking!
         return true;
     }
+
+    public int compareTo(Object obj)
+    {
+        return 0;
+    }
 }

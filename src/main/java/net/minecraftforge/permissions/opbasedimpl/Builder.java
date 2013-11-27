@@ -6,7 +6,7 @@ import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraftforge.permissions.api.PermBuilder;
 import net.minecraftforge.permissions.api.context.IContext;
 
-public class Builder implements PermBuilder
+public class Builder implements PermBuilder<Builder>
 {
     IContext user, target;
     String username, node;
@@ -42,28 +42,28 @@ public class Builder implements PermBuilder
     }
 
     @Override
-    public PermBuilder setUserName(String name)
+    public Builder setUserName(String name)
     {
         username = name;
         return this;
     }
 
     @Override
-    public PermBuilder setPermNode(String node)
+    public Builder setPermNode(String node)
     {
         this.node = node;
         return this;
     }
 
     @Override
-    public PermBuilder setTargetContext(IContext context)
+    public Builder setTargetContext(IContext context)
     {
         this.target = context;
         return this;
     }
 
     @Override
-    public PermBuilder setUserContext(IContext context)
+    public Builder setUserContext(IContext context)
     {
         this.user = context;
         return this;
