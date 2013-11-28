@@ -1,6 +1,11 @@
 # ForgeEssentials Core AT file.
 # Don't add transformations for modules here.
+# For some crazy reason in 1.6 transformers get the deobf names so SRG is REQUIRED.
 #
-# CommandHandler
+# CommandHandler OBF
 public aa.a # commandMap
 public aa.b # commandSet
+
+# CommandHandler SRG
+public net.minecraft.command.CommandHandler.field_71561_b
+public net.minecraft.command.CommandHandler.field_71562_a

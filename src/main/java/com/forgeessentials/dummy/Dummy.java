@@ -35,6 +35,7 @@ public class Dummy implements IFEModule
     {
         ForgeEssentials.LOGGER.info("Dummy enable");
         event.getLogger().info("Logger Test");
+        event.registerCommand(new PermissionsTester());
     }
 
     @Override
