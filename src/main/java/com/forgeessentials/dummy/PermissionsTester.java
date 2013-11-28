@@ -7,10 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraftforge.permissions.api.PermissionsManager;
 
-import com.forgeessentials.core.commands.IFECommand;
+import com.forgeessentials.core.commands.FECommandBase;
 
 // Example command, to show how to use 1.6 localization and permissions.
-public class PermissionsTester implements IFECommand{
+public class PermissionsTester extends FECommandBase{
 
 	@Override
 	public List addTabCompletionOptions(ICommandSender arg0, String[] arg1) {
@@ -36,7 +36,7 @@ public class PermissionsTester implements IFECommand{
 
 	@Override
 	public String getCommandUsage(ICommandSender arg0) {
-		return "commands.dummy.permTester";
+		return "/testperm";
 	}
 
 	@Override
