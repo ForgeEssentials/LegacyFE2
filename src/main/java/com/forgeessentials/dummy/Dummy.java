@@ -5,10 +5,14 @@ import com.forgeessentials.core.modules.IFEModule;
 import com.forgeessentials.core.modules.ModuleContainer;
 import com.forgeessentials.core.modules.events.ModuleDisableEvent;
 import com.forgeessentials.core.modules.events.ModuleEnableEvent;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 
 import java.io.File;
 import java.util.List;
+
+import net.minecraft.server.MinecraftServer;
 
 @IFEModule.LoadMe(name = "Dummy")
 public class Dummy implements IFEModule

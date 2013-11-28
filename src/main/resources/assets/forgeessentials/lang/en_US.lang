@@ -1,0 +1,3 @@
+commands.dummy.permTester=Tests permission fe.dummy.test. Will return true if allowed, false if not.
+commands.dummy.permTester.allowed=Permission is ALLOWED
+commands.dummy.permTester.denied=Permission is DENIED

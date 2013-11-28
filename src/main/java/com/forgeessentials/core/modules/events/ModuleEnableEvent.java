@@ -1,14 +1,11 @@
 package com.forgeessentials.core.modules.events;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
+import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 
 public interface ModuleEnableEvent extends FEModuleEvent
 {
-    /**
-     * TODO: stuff with this.....
-     */
-    void registerCommand();
 
     MinecraftServer getServer();
 
@@ -31,4 +28,6 @@ public interface ModuleEnableEvent extends FEModuleEvent
      * @see cpw.mods.fml.common.event.FMLInterModComms.IMCMessage
      */
     void sendToModule(String moduleName, FMLInterModComms.IMCMessage message);
+
+	void registerCommand(ICommand command);
 }
