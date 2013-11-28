@@ -4,6 +4,7 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 
+import com.forgeessentials.core.ForgeEssentials;
 import com.forgeessentials.core.modules.ModuleContainer;
 import com.forgeessentials.core.modules.events.ModuleEnableEvent;
 
@@ -32,7 +33,9 @@ public class ModuleEnableEventImpl extends AbstractModuleEvent implements Module
     @Override
     public void registerCommand(ICommand command)
     {
-    	event.registerServerCommand(command);
+    	CommandHandler ch = (CommandHandler)getServer().getCommandManager();
+    	ch.registerCommand(command);
+    	ForgeEssentials.LOGGER.debug("Registering command " + command.getClass().getName());
     }
 
     @Override

@@ -2,7 +2,7 @@
 # Don't add transformations for modules here.
 # For some crazy reason in 1.6 transformers get the deobf names so SRG is REQUIRED.
 #
-# CommandHandler OBF
+# CommandHandler OBF 1.6.4
 public aa.a # commandMap
 public aa.b # commandSet
 

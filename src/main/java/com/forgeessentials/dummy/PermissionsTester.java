@@ -61,7 +61,7 @@ public class PermissionsTester implements IFECommand{
 	@Override
 	public String getCommandPermission() {
 		// TODO Auto-generated method stub
-		return null;
+		return "fe.dummy.commands." + getCommandName();
 	}
 
 }

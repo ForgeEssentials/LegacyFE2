@@ -6,7 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 
-public class ReloadCommand extends FECommanBase
+public class ReloadCommand extends FECommandBase
 {
     @Override
     public String getCommandPermission()
@@ -23,7 +23,7 @@ public class ReloadCommand extends FECommanBase
     @Override
     public String getCommandUsage(ICommandSender icommandsender)
     {
-        return "Reload the ForgeEssentials modules";
+        return "commands.core.reload.usage";
     }
 
     @Override

@@ -10,16 +10,17 @@ import com.forgeessentials.core.ForgeEssentials;
 /**
  * Use this class for internal FE commands.
  */
-public abstract class FECommanBase extends CommandBase implements IFECommand
+public abstract class FECommandBase extends CommandBase implements IFECommand
 {
     // checks command if it's a player, else just allow
 	@Override
     public boolean canCommandSenderUseCommand(ICommandSender sender)
     {
         ForgeEssentials.LOGGER.info("Command permission: " + getCommandPermission());
-        if (sender instanceof EntityPlayer)
-        	return PermissionsManager.checkPerm((EntityPlayer)sender, getCommandPermission());
-        else return true;
+        //if (sender instanceof EntityPlayer)
+        	//return PermissionsManager.checkPerm((EntityPlayer)sender, getCommandPermission());
+        //else return true;
+        return true;
     }
 
     public int compareTo(Object obj)

@@ -1,7 +1,7 @@
 package com.forgeessentials.core;
 
 import com.forgeessentials.core.commands.CmdWrapper;
-import com.forgeessentials.core.commands.FECommanBase;
+import com.forgeessentials.core.commands.FECommandBase;
 import com.forgeessentials.core.commands.ReloadCommand;
 import com.forgeessentials.core.modules.internal.ModuleLoaderImpl;
 import cpw.mods.fml.common.Mod;
@@ -17,7 +17,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 
-@Mod(modid = ForgeEssentials.MODID, name = ForgeEssentials.NAME)
+@Mod(modid = ForgeEssentials.MODID, name = ForgeEssentials.NAME, version = ForgeEssentials.VERSION)
 public class ForgeEssentialsMod
 {
     @Mod.Instance(ForgeEssentials.MODID)
@@ -47,7 +47,7 @@ public class ForgeEssentialsMod
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerStartedEvent event)
     {
-        doCommandCheck();
+        // doCommandCheck(); commented out for now.. this is causing me problems
     }
 
     @Mod.EventHandler
@@ -72,7 +72,7 @@ public class ForgeEssentialsMod
         commandHandler.commandMap.clear();
         for (Object command : oldSet)
         {
-            if (command instanceof FECommanBase)
+            if (command instanceof FECommandBase)
             {
                 commandHandler.registerCommand((ICommand) command);
             }

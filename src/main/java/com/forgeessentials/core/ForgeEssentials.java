@@ -16,6 +16,7 @@ public class ForgeEssentials
 {
     public static final String MODID  = "ForgeEssentials";
     public static final String NAME   = "ForgeEssentials";
+    public static final String VERSION = "2.0pre1-SNAPSHOT";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static File FEDIR;
     public static File SETTINGS_DIR;

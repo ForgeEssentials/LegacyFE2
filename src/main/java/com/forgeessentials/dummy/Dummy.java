@@ -1,22 +1,28 @@
 package com.forgeessentials.dummy;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraftforge.permissions.api.PermBuilderFactory.PermReg;
+import net.minecraftforge.permissions.api.RegisteredPermValue;
+
 import com.forgeessentials.core.ForgeEssentials;
 import com.forgeessentials.core.modules.IFEModule;
 import com.forgeessentials.core.modules.ModuleContainer;
 import com.forgeessentials.core.modules.events.ModuleDisableEvent;
 import com.forgeessentials.core.modules.events.ModuleEnableEvent;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
-
-import java.io.File;
-import java.util.List;
-
-import net.minecraft.server.MinecraftServer;
 
 @IFEModule.LoadMe(name = "Dummy")
 public class Dummy implements IFEModule
 {
+	private static List<PermReg> perms = new ArrayList<PermReg>();
+	static{
+		perms.add(new PermReg("fe.dummy.test", RegisteredPermValue.TRUE, null));
+		perms.add(new PermReg("fe.dummy.commands.testperm", RegisteredPermValue.TRUE, null));
+	}
 
     @Override
     public String getVersion()
