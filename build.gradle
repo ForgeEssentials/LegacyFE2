@@ -64,6 +64,12 @@ allprojects {
 	}
 }
 
+jar{
+    manifest{
+	attributes ("TweakClass": "com.forgeessentials.core.classloading.FETweaker") // temp until we can do something about that pesky coreloader
+    }
+}
+
 subprojects {
     apply plugin: 'java'
 
@@ -75,12 +81,12 @@ subprojects {
             // manifest generation
             manifest {
                 // versions
-                attributes version: project.version, mcversion: rootProject.minecraft.version
+                attributes(version: project.version, mcversion: rootProject.minecraft.version)
                 // asm stuff and ATs
-                attributes "FECoreASM": asm.join(' '), "FECoreAT": ats.join(' ')
+                attributes("FECoreASM": asm.join(' '), "FECoreAT": ats.join(' '))
                 // libds and deps
-                attributes "FECoreLibsMaven": deps.join(' ')
-                attributes "TweakClass": "com.forgeessentials.core.classloading.FETweaker" // temp until we can do something about that pesky coreloader
+                attributes ("FECoreLibsMaven": deps.join(' '))
+                attributes ("TweakClass": "com.forgeessentials.core.classloading.FETweaker") // temp until we can do something about that pesky coreloader
             }
         }
 
