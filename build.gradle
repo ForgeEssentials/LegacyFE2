@@ -13,20 +13,22 @@ buildscript {
 
 apply plugin: "forge"
 group = 'com.forgeessentials'
-version = "2.0.${System.env.NR}"
+version = "2.0.${bamboo.buildNumber}"
 archivesBaseName = 'ForgeEssentials'
 
 // bamboo vars
-if (!hasProperty('branch'))
+if (!hasProperty('${bamboo.repository.git.branch}'))
 {
     ext.branch = 'master'
     logger.lifecycle "SETTING BRANCH TO MASTER"
 }
-if (!hasProperty('buildnumber'))
+if (!hasProperty('${bamboo.buildNumber}'))
 {
     ext.buildnumber = 0
     logger.lifecycle "SETTING BUILDNUMBER TO 0"
 }
+
+logger.lifecycle "Building ${bamboo.buildResultKey}"
 
 minecraft {
     version = "1.6.4-9.11.1.960"
