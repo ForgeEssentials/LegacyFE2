@@ -12,6 +12,9 @@ buildscript {
 }
 
 apply plugin: "forge"
+group = 'com.forgeessentials'
+version = "2.0.${System.env.NR}"
+archivesBaseName = 'ForgeEssentials'
 
 // bamboo vars
 if (!hasProperty('branch'))
