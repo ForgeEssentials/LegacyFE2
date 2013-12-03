@@ -6,7 +6,7 @@ ForgeEssentials 2.0 repository for Minecraft 1.6 and onwards.
 <hr>
 Recoding is a slow process and will take time. We request for your cooperation in being patient.
 
-If you wish to compile/work on FE yourself you may fork this repo and run 'gradlew build' in the folder you forked this repo to.
+If you wish to compile/work on FE yourself you may fork this repo and run 'gradlew setupDevWorkspace' in the folder you forked this repo to.
 
-#### there is a good reason for issues on this project being disabled. Please use JIRA
+#### There is a good reason for issues on this project being disabled. Please use JIRA for feature requests.
 #### http://jira.forgeessentials.com/browse/FE
