@@ -1,0 +1,10 @@
+version = '0.1'
+
+// OPTIONAL SETTINGS
+// asm += "com.forgeessentials.asm.something"
+// ats += "module-${project.name}.cfg"
+// moduleDeps += "Chat"                                depends on the Chat module
+// deps += 'commons-lang:commons-lang:2.6'             depends on some maven dep
+
+// defaultClient = false
+// defaultServer = true
