@@ -219,3 +219,7 @@ public class JsonTask extends DefaultTask
 		return project.file(output)
 	}
 }
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.10'
+}
