@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraftforge.permissions.api.PermBuilderFactory.PermReg;
+import net.minecraftforge.permissions.api.PermissionsManager;
 import net.minecraftforge.permissions.api.RegisteredPermValue;
 
 import com.forgeessentials.core.ForgeEssentials;
@@ -42,6 +43,7 @@ public class Dummy implements IFEModule
         ForgeEssentials.LOGGER.info("Dummy enable");
         event.getLogger().info("Logger Test");
         event.registerCommand(new PermissionsTester());
+        // PermissionsManager.getPermFactory().registerPermissions(perms);
     }
 
     @Override

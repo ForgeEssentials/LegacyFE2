@@ -66,7 +66,7 @@ public interface IFEModule
 
     /**
      * Use this to initialize the module.
-     * This will never be called twice in a row. The disable method will always be called between consecutive calls to this method.
+     * This will never be called twice in a row. The disable method will always be called between consecutive calls to this method. Called on server start.
      *
      * @param event
      * @see cpw.mods.fml.common.event.FMLServerStartingEvent
@@ -75,7 +75,7 @@ public interface IFEModule
 
     /**
      * Called when the server is stopping.
-     * This will never be called twice in a row. The enable method will always be called between consecutive calls to this method.
+     * This will never be called twice in a row. The enable method will always be called between consecutive calls to this method. Called on server stop.
      *
      * @param event
      * @see cpw.mods.fml.common.event.FMLServerStoppingEvent

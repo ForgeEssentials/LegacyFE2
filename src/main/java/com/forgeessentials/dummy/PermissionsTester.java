@@ -19,7 +19,7 @@ public class PermissionsTester extends FECommandBase{
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender arg0) {
-		return false;
+		return true;
 		
 	}
 
@@ -47,8 +47,8 @@ public class PermissionsTester extends FECommandBase{
 	@Override
 	public void processCommand(ICommandSender arg0, String[] arg1) {
 		if (arg0 instanceof EntityPlayer && PermissionsManager.checkPerm((EntityPlayer)arg0, "fe.dummy.test"))
-        	arg0.sendChatToPlayer(ChatMessageComponent.createFromText("commands.dummy.permTester.allowed"));
-		else arg0.sendChatToPlayer(ChatMessageComponent.createFromText("commands.dummy.permTester.denied"));
+        	arg0.sendChatToPlayer(ChatMessageComponent.createFromText("Permission is ALLOWED"));
+		else arg0.sendChatToPlayer(ChatMessageComponent.createFromText("Permission is DENIED"));
         
 	}
 
