@@ -16,6 +16,7 @@ group = 'com.forgeessentials'
 version = "2.0.pre1-SNAPSHOT"
 archivesBaseName = 'ForgeEssentials'
 
+
 // bamboo vars
 if (!hasProperty('branch'))
 {
@@ -73,6 +74,7 @@ jar{
 subprojects {
     apply plugin: 'java'
 
+
     afterEvaluate {
         // tack on the BuildNumber
         version += '.' + buildnumber
@@ -86,7 +88,6 @@ subprojects {
                 attributes("FECoreASM": asm.join(' '), "FECoreAT": ats.join(' '))
                 // libds and deps
                 attributes ("FECoreLibsMaven": deps.join(' '))
-                attributes ("TweakClass": "com.forgeessentials.core.classloading.FETweaker") // temp until we can do something about that pesky coreloader
             }
         }
 

@@ -47,7 +47,7 @@ public class ForgeEssentialsMod
     @Mod.EventHandler
     public void handleFMLEvent(FMLServerStartedEvent event)
     {
-        // doCommandCheck(); commented out for now.. this is causing me problems
+        doCommandCheck(); //commented out for now.. this is causing me problems
     }
 
     @Mod.EventHandler
