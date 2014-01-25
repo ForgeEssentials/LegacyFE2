@@ -19,6 +19,8 @@ import net.minecraftforge.permissions.opbasedimpl.context.WorldContext;
 import java.util.List;
 import java.util.TreeSet;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class OpPermFactory implements PermBuilderFactory<Builder>
 {
     static TreeSet<String> opPerms      = new TreeSet<String>();
@@ -94,8 +96,10 @@ public class OpPermFactory implements PermBuilderFactory<Builder>
         for (PermReg entry : perms)
         {
             // avoid duplicates that are already configured
-            if (isRegisterred(entry.key))
+            if (isRegistered(entry.key))
                 continue;
+            
+            FMLLog.fine("Registering permission node %s with default value %s", entry.key, entry.role);
 
             switch(entry.role)
             {
@@ -115,7 +119,7 @@ public class OpPermFactory implements PermBuilderFactory<Builder>
         }
     }
 
-    private static boolean isRegisterred(String node)
+    private static boolean isRegistered(String node)
     {
         return opPerms.contains(node) || allowedPerms.contains(node) || deniedPerms.contains(node);
     }
