@@ -1,5 +1,6 @@
 package net.minecraftforge.permissions.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.dispenser.ILocation;
@@ -21,6 +22,7 @@ public final class PermissionsManager
     }
 
     private static       boolean            wasSet  = false;
+    private static ArrayList<PermReg> central = new ArrayList<PermReg>(); // the canonical list of permissions, given to the factory at serverStarted
     private static final PermBuilderFactory DEFAULT = new OpPermFactory(); // for now, move to forge's init when we go over
     private static PermBuilderFactory FACTORY;
 
@@ -107,10 +109,10 @@ public final class PermissionsManager
     /**
      * Register a new permissions handler. Do not use unless you know what you're doing.
      * @param factory Your permissions handler class, implementing {@link net.minecraftforge.permissions.api.PermBuilderFactory}
-     * @param mod Your mod container
+     * @param modID Your mod ID
      * @throws IllegalStateException if there is already a permissions handler set.
      */
-    public static void setPermFactory(PermBuilderFactory factory, ModContainer mod) throws IllegalStateException
+    public static void setPermFactory(PermBuilderFactory factory, String modID) throws IllegalStateException
     {
         if (factory == null)
         {
@@ -119,11 +121,11 @@ public final class PermissionsManager
         }
         else if (wasSet)
         {
-            throw new IllegalStateException(String.format("Mod %s tried to register a permission system when one has already been set!", mod.getModId()));
+            throw new IllegalStateException(String.format("Mod %s tried to register a permission system when one has already been set!", modID));
         }
         else
         {
-        	FMLLog.info("Registering permission handler %s from mod %s", factory.toString(), mod.getModId());
+        	FMLLog.info("Registering permission handler %s from mod %s", factory.toString(), modID);
         	FACTORY = factory;
             wasSet = true;
         }
@@ -131,10 +133,10 @@ public final class PermissionsManager
     
     /**
      * Register permissions for checking with the permission handler
-     * @param perms A list of permissions, packed into a {@link net.minecraftforge.permissions.api.PermBuilderFactory.PermReg}
+     * @param perms A permission, packed into a {@link net.minecraftforge.permissions.api.PermBuilderFactory.PermReg}
      */
-    public static void registerPermissions(List<PermReg> perms){
-    	FACTORY.registerPermissions(perms);
+    public static void registerPermissions(PermReg perms){
+    	central.add(perms);
     	
     }
 }

@@ -62,10 +62,6 @@ public interface PermBuilderFactory<T extends PermBuilder>
      */
     IContext getDefaultContext(Object whoKnows);
 
-    /**
-     * This is where permissions are registered with their default value.
-     * @param perms
-     */
     void registerPermissions(List<PermReg> perms);
 
     public static class PermReg
