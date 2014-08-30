@@ -1,12 +1,3 @@
-ForgeEssentials
+LegacyFE2
 ===============
-ForgeEssentials 2.0 repository for Minecraft 1.6 and onwards.
-<hr>
-####Join us on our IRC channel [#forgeessentials](http://webchat.esper.net/?channels=forgeessentials&prompt=1) on EsperNet.####
-<hr>
-Recoding is a slow process and will take time. We request for your cooperation in being patient.
-
-If you wish to compile/work on FE yourself you may fork this repo and run 'gradlew setupDevWorkspace' in the folder you forked this repo to.
-
-#### There is a good reason for issues on this project being disabled. Please use JIRA for feature requests.
-#### http://jira.forgeessentials.com/browse/FE
+This repository is no longer in use. It is only kept online for legacy purposes.
